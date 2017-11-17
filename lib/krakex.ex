@@ -45,6 +45,14 @@ defmodule Krakex do
     Private.request(client, "TradeBalance")
   end
 
+  def open_orders(client \\ client()) do
+    Private.request(client, "OpenOrders")
+  end
+
+  def closed_orders(client \\ client()) do
+    Private.request(client, "ClosedOrders")
+  end
+
   defp client do
     Client.new()
   end
