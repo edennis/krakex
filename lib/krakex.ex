@@ -54,6 +54,7 @@ defmodule Krakex do
   end
 
   defp client do
-    Client.new()
+    config = Application.get_all_env(:krakex)
+    Client.new(config[:api_key], config[:private_key])
   end
 end
