@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/edennis/krakex.svg?branch=master)](https://travis-ci.org/edennis/krakex)
+
 # Krakex
 
 Elixir client for the [Kraken Bitcoin Exchange API](https://www.kraken.com/help/api)
