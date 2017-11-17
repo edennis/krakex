@@ -3,7 +3,7 @@ defmodule Krakex do
   Documentation for Krakex.
   """
 
-  alias Krakex.{Client, Public}
+  alias Krakex.{Client, Private, Public}
 
   def time do
     Public.request(client(), "Time")
@@ -35,6 +35,14 @@ defmodule Krakex do
 
   def spread(pair, opts \\ []) do
     Public.request(client(), "Spread", params: [pair: pair] ++ opts)
+  end
+
+  def balance(client \\ client()) do
+    Private.request(client, "Balance")
+  end
+
+  def trade_balance(client \\ client()) do
+    Private.request(client, "TradeBalance")
   end
 
   defp client do
