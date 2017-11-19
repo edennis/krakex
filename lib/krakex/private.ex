@@ -1,48 +1,33 @@
 defmodule Krakex.Private do
+  alias Krakex.HTTPClient
+
   @base_path "/0/private/"
 
   def request(client, resource, opts \\ []) do
     path = path(resource)
     nonce = nonce()
 
-    {params, opts} = Keyword.pop(opts, :params)
-    encoded_params = URI.encode_query([nonce: nonce] ++ process_params(params))
+    form_data = opts |> Keyword.put(:nonce, nonce) |> process_params()
 
     headers = [
       {"Api-Key", client.key},
-      {"Api-Sign", signature(path, nonce, encoded_params, client.secret)},
-      {"Content-Type", "application/x-www-form-urlencoded"}
+      {"Api-Sign", signature(path, nonce, form_data, client.secret)}
     ]
 
-    case HTTPoison.post(client.endpoint <> path, encoded_params, headers, opts) do
-      {:ok, %{status_code: 200, body: body}} ->
-        case Poison.decode(body) do
-          {:ok, data} ->
-            handle_api_reponse(data)
+    case HTTPClient.post(client.endpoint <> path, form_data, headers) do
+      {:ok, response} ->
+        handle_api_response(response)
 
-          {:error, reason} ->
-            {:error, reason}
-        end
-
-      {:ok, %{body: body}} ->
-        case Poison.decode(body) do
-          {:ok, data} ->
-            handle_api_reponse(data)
-
-          {:error, reason} ->
-            {:error, reason}
-        end
-
-      {:error, %{reason: reason}} ->
+      {:error, reason} ->
         {:error, reason}
     end
   end
 
-  defp handle_api_reponse(%{"error" => [], "result" => result}) do
+  defp handle_api_response(%{"error" => [], "result" => result}) do
     {:ok, result}
   end
 
-  defp handle_api_reponse(%{"error" => errors}) do
+  defp handle_api_response(%{"error" => errors}) do
     {:error, hd(errors)}
   end
 
@@ -72,7 +57,8 @@ defmodule Krakex.Private do
     System.system_time() |> to_string()
   end
 
-  def signature(path, nonce, params, secret) do
+  def signature(path, nonce, form_data, secret) do
+    params = URI.encode_query(form_data)
     sha_sum = :crypto.hash(:sha256, nonce <> params)
     mac_sum = :crypto.hmac(:sha512, secret, path <> sha_sum)
     Base.encode64(mac_sum)

@@ -1,47 +1,27 @@
 defmodule Krakex.Public do
+  alias Krakex.HTTPClient
+
   @base_path "/0/public/"
 
   def request(client, resource, opts \\ []) do
     url = client.endpoint <> path(resource)
 
-    opts =
-      case opts[:params] do
-        params when is_list(params) ->
-          Keyword.put(opts, :params, process_params(params))
+    form_data = process_params(opts)
 
-        _ ->
-          opts
-      end
+    case HTTPClient.post(url, form_data, []) do
+      {:ok, response} ->
+        handle_api_response(response)
 
-    case HTTPoison.get(url, [], opts) do
-      {:ok, %{status_code: 200, body: body}} ->
-        case Poison.decode(body) do
-          {:ok, data} ->
-            handle_api_reponse(data)
-
-          {:error, reason} ->
-            {:error, reason}
-        end
-
-      {:ok, %{body: body}} ->
-        case Poison.decode(body) do
-          {:ok, data} ->
-            handle_api_reponse(data)
-
-          {:error, reason} ->
-            {:error, reason}
-        end
-
-      {:error, %{reason: reason}} ->
+      {:error, reason} ->
         {:error, reason}
     end
   end
 
-  defp handle_api_reponse(%{"error" => [], "result" => result}) do
+  defp handle_api_response(%{"error" => [], "result" => result}) do
     {:ok, result}
   end
 
-  defp handle_api_reponse(%{"error" => errors}) do
+  defp handle_api_response(%{"error" => errors}) do
     {:error, hd(errors)}
   end
 

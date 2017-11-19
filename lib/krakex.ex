@@ -5,7 +5,7 @@ defmodule Krakex do
 
   alias Krakex.{Client, Private, Public}
 
-  def time do
+  def server_time do
     Public.request(client(), "Time")
   end
 
@@ -18,23 +18,23 @@ defmodule Krakex do
   end
 
   def ticker(pairs) when is_list(pairs) do
-    Public.request(client(), "Ticker", params: [pair: pairs])
+    Public.request(client(), "Ticker", pair: pairs)
   end
 
   def ohlc(pair, opts \\ []) do
-    Public.request(client(), "OHLC", params: [pair: pair] ++ opts)
+    Public.request(client(), "OHLC", [pair: pair] ++ opts)
   end
 
   def depth(pair, opts \\ []) do
-    Public.request(client(), "Depth", params: [pair: pair] ++ opts)
+    Public.request(client(), "Depth", [pair: pair] ++ opts)
   end
 
   def trades(pair, opts \\ []) do
-    Public.request(client(), "Trades", params: [pair: pair] ++ opts)
+    Public.request(client(), "Trades", [pair: pair] ++ opts)
   end
 
   def spread(pair, opts \\ []) do
-    Public.request(client(), "Spread", params: [pair: pair] ++ opts)
+    Public.request(client(), "Spread", [pair: pair] ++ opts)
   end
 
   def balance(client \\ client()) do
@@ -55,6 +55,13 @@ defmodule Krakex do
 
   defp client do
     config = Application.get_all_env(:krakex)
-    Client.new(config[:api_key], config[:private_key])
+
+    case {config[:api_key], config[:private_key]} do
+      {api_key, private_key} when is_binary(api_key) and is_binary(private_key) ->
+        Client.new(config[:api_key], config[:private_key])
+
+      _ ->
+        Client.new()
+    end
   end
 end
