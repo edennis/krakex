@@ -1,5 +1,5 @@
 defmodule Krakex.API do
-  @callback request(client :: module, resource :: binary, opts :: keyword) ::
+  @callback request(client :: Krakex.Client.t(), resource :: binary, opts :: keyword) ::
               {:ok, any} | {:error, any}
 
   @callback path(resource :: binary) :: binary

@@ -20,7 +20,8 @@ defmodule Krakex.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.13"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false}
     ]
   end
 end

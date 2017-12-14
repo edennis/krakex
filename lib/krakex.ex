@@ -5,55 +5,63 @@ defmodule Krakex do
 
   alias Krakex.{Client, Private, Public}
 
-  def server_time do
-    Public.request(client(), "Time")
+  defmodule MissingConfigError do
+    defexception [:message]
   end
 
-  def assets do
-    Public.request(client(), "Assets")
+  def server_time(client \\ client()) do
+    Public.request(client, "Time")
   end
 
-  def asset_pairs do
-    Public.request(client(), "AssetPairs")
+  def assets(client \\ client()) do
+    Public.request(client, "Assets")
   end
 
-  def ticker(pairs) when is_list(pairs) do
-    Public.request(client(), "Ticker", pair: pairs)
+  def asset_pairs(client \\ client()) do
+    Public.request(client, "AssetPairs")
   end
 
-  def ohlc(pair, opts \\ []) do
-    Public.request(client(), "OHLC", [pair: pair] ++ opts)
+  def ticker(client \\ client(), pairs) when is_list(pairs) do
+    Public.request(client, "Ticker", pair: pairs)
   end
 
-  def depth(pair, opts \\ []) do
-    Public.request(client(), "Depth", [pair: pair] ++ opts)
+  def ohlc(client \\ client(), pair, opts \\ []) do
+    Public.request(client, "OHLC", [pair: pair] ++ opts)
   end
 
-  def trades(pair, opts \\ []) do
-    Public.request(client(), "Trades", [pair: pair] ++ opts)
+  def depth(client \\ client(), pair, opts \\ []) do
+    Public.request(client, "Depth", [pair: pair] ++ opts)
   end
 
-  def spread(pair, opts \\ []) do
-    Public.request(client(), "Spread", [pair: pair] ++ opts)
+  def trades(client \\ client(), pair, opts \\ []) do
+    Public.request(client, "Trades", [pair: pair] ++ opts)
   end
 
-  def balance(client \\ client()) do
+  def spread(client \\ client(), pair, opts \\ []) do
+    Public.request(client, "Spread", [pair: pair] ++ opts)
+  end
+
+  def balance(client \\ private_client()) do
     Private.request(client, "Balance")
   end
 
-  def trade_balance(client \\ client()) do
+  def trade_balance(client \\ private_client()) do
     Private.request(client, "TradeBalance")
   end
 
-  def open_orders(client \\ client()) do
+  def open_orders(client \\ private_client()) do
     Private.request(client, "OpenOrders")
   end
 
-  def closed_orders(client \\ client()) do
+  def closed_orders(client \\ private_client()) do
     Private.request(client, "ClosedOrders")
   end
 
   defp client do
+    Client.new()
+  end
+
+  defp private_client do
     config = Application.get_all_env(:krakex)
 
     case {config[:api_key], config[:private_key]} do
@@ -61,7 +69,15 @@ defmodule Krakex do
         Client.new(config[:api_key], config[:private_key])
 
       _ ->
-        Client.new()
+        raise MissingConfigError,
+          message: """
+          This API call requires an API key and a private key and I wasn't able to find them in your
+          mix config. You need to define them like this:
+
+          config :krakex,
+            api_key: "KRAKEN_API_KEY",
+            private_key: "KRAKEN_PRIVATE_KEY"
+          """
     end
   end
 end

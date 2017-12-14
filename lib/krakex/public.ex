@@ -1,11 +1,11 @@
 defmodule Krakex.Public do
   @behaviour Krakex.API
 
-  alias Krakex.{API, HTTPClient}
+  alias Krakex.{API, Client, HTTPClient}
 
   @base_path "/0/public/"
 
-  def request(client, resource, opts \\ []) do
+  def request(%Client{} = client, resource, opts \\ []) do
     url = client.endpoint <> path(resource)
 
     form_data = API.process_params(opts)

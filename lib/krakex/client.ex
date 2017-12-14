@@ -3,12 +3,12 @@ defmodule Krakex.Client do
 
   defstruct endpoint: @endpoint, key: nil, secret: nil
 
-  @type t :: %__MODULE__{endpoint: binary, key: binary, secret: binary}
+  @type t :: %__MODULE__{endpoint: binary, key: binary | nil, secret: binary | nil}
 
   @spec new() :: t
   def new(), do: %__MODULE__{}
 
-  @spec new(api_key :: binary, private_key :: binary, endpoint :: binary) :: t
+  @spec new(binary, binary, binary) :: t
   def new(api_key, private_key, endpoint \\ @endpoint)
       when is_binary(api_key) and is_binary(private_key) and is_binary(endpoint) do
     %__MODULE__{endpoint: endpoint, key: api_key, secret: decode_private_key(private_key)}

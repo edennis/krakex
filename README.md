@@ -19,6 +19,10 @@ end
 
 ## Configuration
 
+The Kraken API consists of public and private calls. While you can use the public API as you like,
+you'll need to create an account and get yourself an API key if you want to do more. To use the
+private API you'll need to add some configuration to your Mix config:
+
 ```elixir
 config :krakex,
   api_key: System.get_env("KRAKEN_API_KEY"),

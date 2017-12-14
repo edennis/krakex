@@ -1,19 +1,26 @@
 defmodule Krakex.Private do
   @behaviour Krakex.API
 
-  alias Krakex.{API, HTTPClient}
+  alias Krakex.{API, Client, HTTPClient}
 
   @base_path "/0/private/"
 
-  def request(client, resource, opts \\ []) do
+  defmodule MissingCredentialsError do
+    defexception [:message]
+  end
+
+  def request(client, resource, opts \\ [])
+
+  def request(%Client{key: key, secret: secret} = client, resource, opts)
+      when is_binary(key) and is_binary(secret) do
     path = path(resource)
     nonce = nonce()
 
     form_data = opts |> Keyword.put(:nonce, nonce) |> API.process_params()
 
     headers = [
-      {"Api-Key", client.key},
-      {"Api-Sign", signature(path, nonce, form_data, client.secret)}
+      {"Api-Key", key},
+      {"Api-Sign", signature(path, nonce, form_data, secret)}
     ]
 
     case HTTPClient.post(client.endpoint <> path, form_data, headers) do
@@ -23,6 +30,10 @@ defmodule Krakex.Private do
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  def request(%Client{}, _, _) do
+    raise MissingCredentialsError, message: "the client is missing values for :key and/or :secret"
   end
 
   def path(resource) do
