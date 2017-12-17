@@ -28,3 +28,7 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+config :krakex,
+  api_key: System.get_env("KRAKEN_API_KEY"),
+  private_key: System.get_env("KRAKEN_PRIVATE_KEY")

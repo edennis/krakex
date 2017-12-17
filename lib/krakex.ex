@@ -25,6 +25,7 @@ defmodule Krakex do
     Public.request(client, "Ticker", pair: pairs)
   end
 
+  # An open-high-low-close chart (also OHLC) is a type of chart typically used to illustrate movements in the price of a financial instrument over time. Each vertical line on the chart shows the price range (the highest and lowest prices) over one unit of time, e.g., one day or one hour
   def ohlc(client \\ client(), pair, opts \\ []) do
     Public.request(client, "OHLC", [pair: pair] ++ opts)
   end
@@ -53,9 +54,45 @@ defmodule Krakex do
     Private.request(client, "OpenOrders")
   end
 
-  def closed_orders(client \\ private_client()) do
-    Private.request(client, "ClosedOrders")
+  def closed_orders(client \\ private_client(), opts \\ [])
+
+  def closed_orders(opts, []) do
+    Private.request(private_client(), "ClosedOrders", opts)
   end
+
+  def closed_orders(%Client{} = client, opts) when is_list(opts) do
+    Private.request(client, "ClosedOrders", opts)
+  end
+
+  def query_orders(tx_ids, client \\ private_client()) do
+    Private.request(client, "QueryOrders", txid: tx_ids)
+  end
+
+  def trades_history(client \\ private_client(), opts) do
+    Private.request(client, "TradesHistory", opts)
+  end
+
+  def query_trades(client \\ private_client(), tx_ids, opts) do
+    Private.request(client, "QueryTrades", [txid: tx_ids] ++ opts)
+  end
+
+  def open_positions(client \\ private_client(), tx_ids, opts) do
+    Private.request(client, "OpenPositions", [txid: tx_ids] ++ opts)
+  end
+
+  def ledgers(client \\ private_client(), opts) do
+    Private.request(client, "Ledgers", opts)
+  end
+
+  def query_ledgers(client \\ private_client(), ids) do
+    Private.request(client, "QueryLedgers", id: ids)
+  end
+
+  def trade_volume(client \\ private_client()) do
+    Private.request(client, "TradeVolume", [])
+  end
+
+  # TODO: add_order, cancel_order
 
   defp client do
     Client.new()

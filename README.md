@@ -29,6 +29,14 @@ config :krakex,
   private_key: System.get_env("KRAKEN_PRIVATE_KEY")
 ```
 
+## Usage
+
+
+
+```elixir
+
+```
+
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/krakex](https://hexdocs.pm/krakex).
