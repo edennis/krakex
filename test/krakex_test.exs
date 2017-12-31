@@ -5,8 +5,7 @@ defmodule KrakexTest do
   alias Krakex.Fixture
 
   defmodule TestClient do
-    def post("https://api.kraken.com/0/public/Time", _, _),
-      do: {:ok, Fixture.load!("server_time")}
+    def get("https://api.kraken.com/0/public/Time", _, _), do: {:ok, Fixture.load!("server_time")}
   end
 
   setup_all do

@@ -7,15 +7,10 @@ defmodule Krakex.API do
   def public_request(%Client{http_client: http_client} = client, resource, opts \\ []) do
     url = client.endpoint <> public_path(resource)
 
-    form_data = process_params(opts)
+    params = process_params(opts)
 
-    case http_client.post(url, form_data, []) do
-      {:ok, response} ->
-        handle_response(response)
-
-      {:error, reason} ->
-        {:error, reason}
-    end
+    response = http_client.get(url, [], params: params)
+    handle_http_response(response)
   end
 
   defmodule MissingCredentialsError do
@@ -36,13 +31,8 @@ defmodule Krakex.API do
       {"Api-Sign", signature(path, nonce, form_data, secret)}
     ]
 
-    case client.http_client.post(client.endpoint <> path, form_data, headers) do
-      {:ok, response} ->
-        handle_response(response)
-
-      {:error, reason} ->
-        {:error, reason}
-    end
+    response = client.http_client.post(client.endpoint <> path, form_data, headers)
+    handle_http_response(response)
   end
 
   def private_request(%Client{}, _, _) do
@@ -68,14 +58,12 @@ defmodule Krakex.API do
     Base.encode64(mac_sum)
   end
 
-  defp handle_response(%{"error" => [], "result" => result}) do
-    {:ok, result}
-  end
+  defp handle_http_response({:ok, response}), do: handle_api_response(response)
+  defp handle_http_response({:error, reason}), do: {:error, reason}
 
-  defp handle_response(%{"error" => errors}) do
-    # TODO: check if more than one error can occur
-    {:error, hd(errors)}
-  end
+  defp handle_api_response(%{"error" => [], "result" => result}), do: {:ok, result}
+  # TODO: check if more than one error can occur
+  defp handle_api_response(%{"error" => errors}), do: {:error, hd(errors)}
 
   defp process_params(params) do
     Enum.map(params, fn {k, v} ->

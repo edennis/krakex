@@ -8,13 +8,21 @@ defmodule Krakex.HTTPClient do
   @type response :: {:ok, term} | {:error, term}
 
   @client HTTPoison
-  @headers [{"accept", "application/json"}, {"content-type", "application/x-www-form-urlencoded"}]
+  @headers [{"accept", "application/json"}]
+  @post_headers @headers ++ [{"content-type", "application/x-www-form-urlencoded"}]
+
+  @spec get(url :: String.t(), headers :: list, opts :: list, client :: module) :: response
+  def get(url, headers, opts, client \\ @client)
+      when is_binary(url) and is_list(headers) and is_list(opts) do
+    response = client.get(url, headers ++ @headers, opts)
+    handle_response(response)
+  end
 
   @spec post(url :: String.t(), form_data :: keyword, headers :: list, client :: module) ::
           response
   def post(url, form_data, headers, client \\ @client)
       when is_binary(url) and is_list(form_data) and is_list(headers) do
-    response = client.post(url, {:form, form_data}, headers ++ @headers)
+    response = client.post(url, {:form, form_data}, headers ++ @post_headers)
     handle_response(response)
   end
 
