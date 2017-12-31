@@ -58,7 +58,6 @@ iex(3)> Krakex.assets
    "ZUSD" => %{"aclass" => "currency", "altname" => "USD", "decimals" => 4,
      "display_decimals" => 2}}}
 
-
 iex(4)> Krakex.asset_pairs
 {:ok,
  %{"XETHZUSD.d" => %{"aclass_base" => "currency", "aclass_quote" => "currency",
@@ -475,8 +474,6 @@ iex(4)> Krakex.asset_pairs
    "XXBTZCAD.d" => %{...}, ...}}
 iex(5)>
 
-iex(5)> Krakex.ticker ["BCHEUR"]
-{:error, :timeout}
 iex(6)> Krakex.ticker ["BCHEUR"]
 {:ok,
  %{"BCHEUR" => %{"a" => ["1499.700000", "1", "1.000"],
@@ -486,7 +483,6 @@ iex(6)> Krakex.ticker ["BCHEUR"]
      "p" => ["1506.805758", "1453.457831"], "t" => [2554, 5763],
      "v" => ["1048.98704992", "3285.86084723"]}}}
 iex(7)>
-
 
 iex(8)> Krakex.ohlc "BCHEUR"
 {:ok,
@@ -576,7 +572,6 @@ iex(8)> Krakex.ohlc "BCHEUR"
     [1513380360, "1508.6", "1508.6", "1508.6", ...],
     [1513380420, "1508.6", "1508.6", ...], [1513380480, "1508.6", ...],
     [1513380540, ...], [...], ...], "last" => 1513420920}}
-iex(9)>
 
 iex(10)> Krakex.depth "BTCEUR"
 {:ok,
@@ -672,7 +667,6 @@ iex(10)> Krakex.depth "BTCEUR"
       ["14818.00000", "2.664", 1513413701],
       ["14810.00000", "0.010", 1513420791], ["14807.10000", "0.006", ...],
       ["14805.90000", ...], [...], ...]}}}
-iex(11)>
 
 iex(11)> Krakex.trades "BTCEUR"
 {:ok,
@@ -723,14 +717,7 @@ iex(11)> Krakex.trades "BTCEUR"
     ["15000.00000", "0.02000000", 1513419723.6868, ...],
     ["15000.00000", "0.14000000", ...], ["15000.00000", ...], [...], ...],
    "last" => "1513421063550491801"}}
-iex(12)>
 
-iex(12)> Krakex.s "BTCEUR"
-server_time/0    server_time/1    spread/1         spread/2
-spread/3
-iex(12)> Krakex.s "BTCEUR"
-server_time/0    server_time/1    spread/1         spread/2
-spread/3
 iex(12)> Krakex.spread "BTCEUR"
 {:ok,
  %{"XXBTZEUR" => [[1513420250, "15004.80000", "15004.90000"],
@@ -782,25 +769,21 @@ iex(12)> Krakex.spread "BTCEUR"
    "last" => 1513421089}}
 iex(13)>
 
-(search)`bal': Krakex.balance
 iex(1)> Krakex.balance
 {:ok,
  %{"BCH" => "0.0000000000", "EOS" => "0.0000000000", "XDAO" => "0.0000000000",
    "XETC" => "0.0030396645", "XETH" => "0.0000000000", "XLTC" => "0.0010000000",
    "XXBT" => "0.0400000000", "XXLM" => "0.00000000", "XXRP" => "200.00000000",
    "ZEUR" => "190.2789"}}
+
 iex(2)> Krakex.trade_balance
 {:ok,
  %{"c" => "0.0000", "e" => "941.9894", "eb" => "1105.4577", "m" => "0.0000",
    "mf" => "941.9894", "n" => "0.0000", "tb" => "941.9894", "v" => "0.0000"}}
-iex(3)> Krakex.open_orders
-{:error, :timeout}
-iex(4)> Krakex.open_orders
-{:error, :timeout}
+
 iex(5)> Krakex.open_orders
 {:ok, %{"open" => %{}}}
-iex(6)> Krakex.closed_orders
-{:error, :timeout}
+
 iex(7)> Krakex.closed_orders
 {:ok,
  %{"closed" => %{"OCMAMN-NAK4Z-ZCAB3W" => %{"closetm" => 1507880821.9049,
@@ -1200,7 +1183,6 @@ iex(7)> Krakex.closed_orders
        "cost" => "0.00000000", ...},
      "OUZWEQ-IILEM-QG75OO" => %{"closetm" => 1505011905.3264, ...},
      "OR5PPV-ITFSE-2TJ3MV" => %{...}, ...}, "count" => 79}}
-iex(8)>
 
 iex(2)> Krakex.query_orders ["O4SRE4-RGXML-6OHU6U"]
 {:ok,
