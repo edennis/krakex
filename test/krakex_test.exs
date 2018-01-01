@@ -173,6 +173,23 @@ defmodule KrakexTest do
     test "closed_orders/2" do
       assert client() |> Krakex.closed_orders(ofs: 50) == :closed_orders_2
     end
+
+    test "query_orders/1" do
+      assert Krakex.query_orders(["OQFZXP-DJRW3-LDF7J5"]) == :query_orders_1
+    end
+
+    test "query_orders/2 client" do
+      assert client() |> Krakex.query_orders(["OQFZXP-DJRW3-LDF7J5"]) == :query_orders_2_client
+    end
+
+    test "query_orders/2 opts" do
+      assert Krakex.query_orders(["OQFZXP-DJRW3-LDF7J5"], trades: true) == :query_orders_2_opts
+    end
+
+    test "query_orders/3" do
+      assert client() |> Krakex.query_orders(["OQFZXP-DJRW3-LDF7J5"], trades: true) ==
+               :query_orders_3
+    end
   end
 
   defp client, do: TestAPI.custom_client()

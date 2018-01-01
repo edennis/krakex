@@ -65,4 +65,16 @@ defmodule Krakex.TestAPI do
   def private_request(@custom_client, "OpenOrders", []), do: :open_orders_1_client
   def private_request(@private_client, "OpenOrders", trades: true), do: :open_orders_1_opts
   def private_request(@custom_client, "OpenOrders", trades: true), do: :open_orders_2
+
+  def private_request(@private_client, "QueryOrders", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :query_orders_1
+
+  def private_request(@custom_client, "QueryOrders", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :query_orders_2_client
+
+  def private_request(@private_client, "QueryOrders", txid: ["OQFZXP-DJRW3-LDF7J5"], trades: true),
+    do: :query_orders_2_opts
+
+  def private_request(@custom_client, "QueryOrders", txid: ["OQFZXP-DJRW3-LDF7J5"], trades: true),
+    do: :query_orders_3
 end

@@ -110,8 +110,14 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "ClosedOrders", opts)
   end
 
-  def query_orders(tx_ids, client \\ @api.private_client()) do
-    @api.private_request(client, "QueryOrders", txid: tx_ids)
+  def query_orders(client \\ @api.private_client(), tx_ids, opts \\ [])
+
+  def query_orders(%Client{} = client, tx_ids, opts) when is_list(opts) do
+    @api.private_request(client, "QueryOrders", [txid: tx_ids] ++ opts)
+  end
+
+  def query_orders(tx_ids, opts, []) do
+    @api.private_request(@api.private_client(), "QueryOrders", [txid: tx_ids] ++ opts)
   end
 
   def trades_history(client \\ @api.private_client(), opts) do
