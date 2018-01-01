@@ -11,12 +11,24 @@ defmodule Krakex do
     @api.public_request(client, "Time")
   end
 
-  def assets(client \\ @api.public_client()) do
-    @api.public_request(client, "Assets")
+  def assets(client \\ @api.public_client(), opts \\ [])
+
+  def assets(%Client{} = client, opts) when is_list(opts) do
+    @api.public_request(client, "Assets", opts)
   end
 
-  def asset_pairs(client \\ @api.public_client()) do
-    @api.public_request(client, "AssetPairs")
+  def assets(opts, []) do
+    @api.public_request(@api.public_client(), "Assets", opts)
+  end
+
+  def asset_pairs(client \\ @api.public_client(), opts \\ [])
+
+  def asset_pairs(%Client{} = client, opts) when is_list(opts) do
+    @api.public_request(client, "AssetPairs", opts)
+  end
+
+  def asset_pairs(opts, []) do
+    @api.public_request(@api.public_client(), "AssetPairs", opts)
   end
 
   def ticker(client \\ @api.public_client(), pairs) when is_list(pairs) do

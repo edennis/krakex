@@ -1,6 +1,5 @@
 defmodule KrakexTest do
   use ExUnit.Case
-  doctest Krakex
 
   alias Krakex.TestAPI
 
@@ -11,6 +10,46 @@ defmodule KrakexTest do
 
     test "server_time/1" do
       assert client() |> Krakex.server_time() == :server_time_1
+    end
+
+    test "assets/0" do
+      assert Krakex.assets() == :assets_0
+    end
+
+    test "assets/1 client" do
+      assert client() |> Krakex.assets() == :assets_1_client
+    end
+
+    test "assets/1 opts" do
+      assert Krakex.assets(asset: ["BTC"]) == :assets_1_opts
+    end
+
+    test "assets/2" do
+      assert client() |> Krakex.assets(asset: ["BTC"]) == :assets_2
+    end
+
+    test "asset_pairs/0" do
+      assert Krakex.asset_pairs() == :asset_pairs_0
+    end
+
+    test "asset_pairs/1 client" do
+      assert client() |> Krakex.asset_pairs() == :asset_pairs_1_client
+    end
+
+    test "asset_pairs/1 opts" do
+      assert Krakex.asset_pairs(pair: ["BTCEUR"]) == :asset_pairs_1_opts
+    end
+
+    test "asset_pairs/2" do
+      assert client() |> Krakex.asset_pairs(pair: ["BTCEUR"]) == :asset_pairs_2
+    end
+
+    test "ticker/1" do
+      assert Krakex.ticker(["BTC"]) == :ticker_1
+    end
+
+    test "ticker/2" do
+      assert client() |> Krakex.ticker(["BTC"]) == :ticker_2
     end
   end
 
