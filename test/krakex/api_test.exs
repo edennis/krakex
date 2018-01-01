@@ -108,4 +108,34 @@ defmodule Krakex.APITest do
       assert client |> API.public_request("Test", []) == {:ok, %{}}
     end
   end
+
+  test "public_client/0" do
+    assert API.public_client() == Client.new()
+  end
+
+  describe "private_client/0" do
+    test "raise on missing config" do
+      execute_with_config(nil, nil, fn ->
+        assert_raise API.MissingConfigError, fn ->
+          API.private_client()
+        end
+      end)
+    end
+
+    test "initializes client from config values" do
+      execute_with_config("my_key", Base.encode64("my_secret"), fn ->
+        assert API.private_client() == %Client{key: "my_key", secret: "my_secret"}
+      end)
+    end
+  end
+
+  defp execute_with_config(tmp_key, tmp_secret, fun) when is_function(fun) do
+    orig_key = Application.get_env(:krakex, :api_key)
+    orig_secret = Application.get_env(:krakex, :private_key)
+    Application.put_env(:krakex, :api_key, tmp_key)
+    Application.put_env(:krakex, :private_key, tmp_secret)
+    fun.()
+    Application.put_env(:krakex, :api_key, orig_key)
+    Application.put_env(:krakex, :private_key, orig_secret)
+  end
 end

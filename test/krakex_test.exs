@@ -18,12 +18,14 @@ defmodule KrakexTest do
       {:ok, %{client: client}}
     end
 
+    @tag :skip
     test "server_time/1", %{client: client} do
       expected = %{"rfc1123" => "Sat, 16 Dec 17 10:52:38 +0000", "unixtime" => 1_513_421_558}
 
       assert client |> Krakex.server_time() == {:ok, expected}
     end
 
+    @tag :skip
     test "assets/1", %{client: client} do
       expected = %{
         "XETH" => %{
@@ -55,6 +57,7 @@ defmodule KrakexTest do
       assert client |> Krakex.assets() == {:ok, expected}
     end
 
+    @tag :skip
     test "asset_pairs/1", %{client: client} do
       expected = %{
         "BCHEUR" => %{

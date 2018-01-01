@@ -11,6 +11,10 @@ defmodule Krakex.API do
     handle_http_response(response)
   end
 
+  defmodule MissingConfigError do
+    defexception [:message]
+  end
+
   defmodule MissingCredentialsError do
     defexception [:message]
   end
@@ -35,6 +39,30 @@ defmodule Krakex.API do
 
   def private_request(%Client{}, _, _) do
     raise MissingCredentialsError, message: "the client is missing values for :key and/or :secret"
+  end
+
+  def public_client do
+    Client.new()
+  end
+
+  def private_client do
+    config = Application.get_all_env(:krakex)
+
+    case {config[:api_key], config[:private_key]} do
+      {api_key, private_key} when is_binary(api_key) and is_binary(private_key) ->
+        Client.new(config[:api_key], config[:private_key])
+
+      _ ->
+        raise MissingConfigError,
+          message: """
+          This API call requires an API key and a private key and I wasn't able to find them in your
+          mix config. You need to define them like this:
+
+          config :krakex,
+            api_key: "KRAKEN_API_KEY",
+            private_key: "KRAKEN_PRIVATE_KEY"
+          """
+    end
   end
 
   defp public_path(resource) do
