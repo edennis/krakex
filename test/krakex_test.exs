@@ -242,6 +242,22 @@ defmodule KrakexTest do
       assert client() |> Krakex.open_positions(["OQFZXP-DJRW3-LDF7J5"], docalcs: true) ==
                :open_positions_3
     end
+
+    test "ledgers/1" do
+      assert Krakex.ledgers(10) == :ledgers_1
+    end
+
+    test "ledgers/2 client" do
+      assert client() |> Krakex.ledgers(10) == :ledgers_2_client
+    end
+
+    test "ledgers/2 opts" do
+      assert Krakex.ledgers(10, type: "trade") == :ledgers_2_opts
+    end
+
+    test "ledgers/3" do
+      assert client() |> Krakex.ledgers(10, type: "trade") == :ledgers_3
+    end
   end
 
   defp client, do: TestAPI.custom_client()

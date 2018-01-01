@@ -121,4 +121,12 @@ defmodule Krakex.TestAPI do
         docalcs: true
       ),
       do: :open_positions_3
+
+  def private_request(@private_client, "Ledgers", ofs: 10), do: :ledgers_1
+
+  def private_request(@custom_client, "Ledgers", ofs: 10), do: :ledgers_2_client
+
+  def private_request(@private_client, "Ledgers", ofs: 10, type: "trade"), do: :ledgers_2_opts
+
+  def private_request(@custom_client, "Ledgers", ofs: 10, type: "trade"), do: :ledgers_3
 end

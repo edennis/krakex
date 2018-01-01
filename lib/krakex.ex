@@ -154,8 +154,14 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "OpenPositions", [txid: tx_ids] ++ opts)
   end
 
-  def ledgers(client \\ @api.private_client(), opts) do
-    @api.private_request(client, "Ledgers", opts)
+  def ledgers(client \\ @api.private_client(), offset, opts \\ [])
+
+  def ledgers(%Client{} = client, offset, opts) do
+    @api.private_request(client, "Ledgers", [ofs: offset] ++ opts)
+  end
+
+  def ledgers(offset, opts, []) do
+    @api.private_request(@api.private_client(), "Ledgers", [ofs: offset] ++ opts)
   end
 
   def query_ledgers(client \\ @api.private_client(), ids) do
