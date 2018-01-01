@@ -118,16 +118,56 @@ defmodule KrakexTest do
   end
 
   describe "private user data" do
+    test "balance/0" do
+      assert Krakex.balance() == :balance_0
+    end
+
+    test "balance/1" do
+      assert client() |> Krakex.balance() == :balance_1
+    end
+
+    test "trade_balance/0" do
+      assert Krakex.trade_balance() == :trade_balance_0
+    end
+
+    test "trade_balance/1 client" do
+      assert client() |> Krakex.trade_balance() == :trade_balance_1_client
+    end
+
+    test "trade_balance/1 opts" do
+      assert Krakex.trade_balance(asset: "ZEUR") == :trade_balance_1_opts
+    end
+
+    test "trade_balance/2" do
+      assert client() |> Krakex.trade_balance(asset: "ZEUR") == :trade_balance_2
+    end
+
+    test "open_orders/0" do
+      assert Krakex.open_orders() == :open_orders_0
+    end
+
+    test "open_orders/1 client" do
+      assert client() |> Krakex.open_orders() == :open_orders_1_client
+    end
+
+    test "open_orders/1 opts" do
+      assert Krakex.open_orders(trades: true) == :open_orders_1_opts
+    end
+
+    test "open_orders/2" do
+      assert client() |> Krakex.open_orders(trades: true) == :open_orders_2
+    end
+
     test "closed_orders/0" do
       assert Krakex.closed_orders() == :closed_orders_0
     end
 
-    test "closed_orders/1 opts" do
-      assert Krakex.closed_orders(trades: true) == :closed_orders_1_opts
-    end
-
     test "closed_orders/1 client" do
       assert client() |> Krakex.closed_orders() == :closed_orders_1_client
+    end
+
+    test "closed_orders/1 opts" do
+      assert Krakex.closed_orders(trades: true) == :closed_orders_1_opts
     end
 
     test "closed_orders/2" do

@@ -51,8 +51,18 @@ defmodule Krakex.TestAPI do
 
   def private_request(client, resource, params \\ [])
 
+  def private_request(@private_client, "Balance", []), do: :balance_0
+  def private_request(@custom_client, "Balance", []), do: :balance_1
+  def private_request(@private_client, "TradeBalance", []), do: :trade_balance_0
+  def private_request(@custom_client, "TradeBalance", []), do: :trade_balance_1_client
+  def private_request(@private_client, "TradeBalance", asset: "ZEUR"), do: :trade_balance_1_opts
+  def private_request(@custom_client, "TradeBalance", asset: "ZEUR"), do: :trade_balance_2
   def private_request(@private_client, "ClosedOrders", []), do: :closed_orders_0
   def private_request(@custom_client, "ClosedOrders", []), do: :closed_orders_1_client
   def private_request(@private_client, "ClosedOrders", trades: true), do: :closed_orders_1_opts
   def private_request(@custom_client, "ClosedOrders", ofs: 50), do: :closed_orders_2
+  def private_request(@private_client, "OpenOrders", []), do: :open_orders_0
+  def private_request(@custom_client, "OpenOrders", []), do: :open_orders_1_client
+  def private_request(@private_client, "OpenOrders", trades: true), do: :open_orders_1_opts
+  def private_request(@custom_client, "OpenOrders", trades: true), do: :open_orders_2
 end

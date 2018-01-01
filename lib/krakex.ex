@@ -80,12 +80,24 @@ defmodule Krakex do
     @api.private_request(client, "Balance")
   end
 
-  def trade_balance(client \\ @api.private_client()) do
-    @api.private_request(client, "TradeBalance")
+  def trade_balance(client \\ @api.private_client(), opts \\ [])
+
+  def trade_balance(%Client{} = client, opts) do
+    @api.private_request(client, "TradeBalance", opts)
   end
 
-  def open_orders(client \\ @api.private_client()) do
-    @api.private_request(client, "OpenOrders")
+  def trade_balance(opts, []) do
+    @api.private_request(@api.private_client(), "TradeBalance", opts)
+  end
+
+  def open_orders(client \\ @api.private_client(), opts \\ [])
+
+  def open_orders(%Client{} = client, opts) when is_list(opts) do
+    @api.private_request(client, "OpenOrders", opts)
+  end
+
+  def open_orders(opts, []) do
+    @api.private_request(@api.private_client(), "OpenOrders", opts)
   end
 
   def closed_orders(client \\ @api.private_client(), opts \\ [])
