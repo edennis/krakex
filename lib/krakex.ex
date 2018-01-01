@@ -46,16 +46,34 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "OHLC", [pair: pair] ++ opts)
   end
 
-  def depth(client \\ @api.public_client(), pair, opts \\ []) do
+  def depth(client \\ @api.public_client(), pair, opts \\ [])
+
+  def depth(%Client{} = client, pair, opts) do
     @api.public_request(client, "Depth", [pair: pair] ++ opts)
   end
 
-  def trades(client \\ @api.public_client(), pair, opts \\ []) do
+  def depth(pair, opts, []) do
+    @api.public_request(@api.public_client(), "Depth", [pair: pair] ++ opts)
+  end
+
+  def trades(client \\ @api.public_client(), pair, opts \\ [])
+
+  def trades(%Client{} = client, pair, opts) do
     @api.public_request(client, "Trades", [pair: pair] ++ opts)
   end
 
-  def spread(client \\ @api.public_client(), pair, opts \\ []) do
+  def trades(pair, opts, []) do
+    @api.public_request(@api.public_client(), "Trades", [pair: pair] ++ opts)
+  end
+
+  def spread(client \\ @api.public_client(), pair, opts \\ [])
+
+  def spread(%Client{} = client, pair, opts) do
     @api.public_request(client, "Spread", [pair: pair] ++ opts)
+  end
+
+  def spread(pair, opts, []) do
+    @api.public_request(@api.public_client(), "Spread", [pair: pair] ++ opts)
   end
 
   def balance(client \\ @api.private_client()) do

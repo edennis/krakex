@@ -67,6 +67,54 @@ defmodule KrakexTest do
     test "ohlc/3" do
       assert client() |> Krakex.ohlc("BTCEUR", interval: 5) == :ohlc_3
     end
+
+    test "depth/1" do
+      assert Krakex.depth("BTCEUR") == :depth_1
+    end
+
+    test "depth/2 client" do
+      assert client() |> Krakex.depth("BTCEUR") == :depth_2_client
+    end
+
+    test "depth/2 opts" do
+      assert Krakex.depth("BTCEUR", count: 5) == :depth_2_opts
+    end
+
+    test "depth/3" do
+      assert client() |> Krakex.depth("BTCEUR", count: 5) == :depth_3
+    end
+
+    test "trades/1" do
+      assert Krakex.trades("BTCEUR") == :trades_1
+    end
+
+    test "trades/2 client" do
+      assert client() |> Krakex.trades("BTCEUR") == :trades_2_client
+    end
+
+    test "trades/2 opts" do
+      assert Krakex.trades("BTCEUR", since: 1_514_828_346) == :trades_2_opts
+    end
+
+    test "trades/3" do
+      assert client() |> Krakex.trades("BTCEUR", since: 1_514_828_346) == :trades_3
+    end
+
+    test "spread/1" do
+      assert Krakex.spread("BTCEUR") == :spread_1
+    end
+
+    test "spread/2 client" do
+      assert client() |> Krakex.spread("BTCEUR") == :spread_2_client
+    end
+
+    test "spread/2 opts" do
+      assert Krakex.spread("BTCEUR", since: 1_514_828_381) == :spread_2_opts
+    end
+
+    test "spread/3" do
+      assert client() |> Krakex.spread("BTCEUR", since: 1_514_828_381) == :spread_3
+    end
   end
 
   describe "private user data" do

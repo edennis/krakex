@@ -27,6 +27,27 @@ defmodule Krakex.TestAPI do
   def public_request(@custom_client, "OHLC", pair: "BTCEUR"), do: :ohlc_2_client
   def public_request(@public_client, "OHLC", pair: "BTCEUR", interval: 5), do: :ohlc_2_opts
   def public_request(@custom_client, "OHLC", pair: "BTCEUR", interval: 5), do: :ohlc_3
+  def public_request(@public_client, "Depth", pair: "BTCEUR"), do: :depth_1
+  def public_request(@custom_client, "Depth", pair: "BTCEUR"), do: :depth_2_client
+  def public_request(@public_client, "Depth", pair: "BTCEUR", count: 5), do: :depth_2_opts
+  def public_request(@custom_client, "Depth", pair: "BTCEUR", count: 5), do: :depth_3
+  def public_request(@public_client, "Trades", pair: "BTCEUR"), do: :trades_1
+  def public_request(@custom_client, "Trades", pair: "BTCEUR"), do: :trades_2_client
+
+  def public_request(@public_client, "Trades", pair: "BTCEUR", since: 1_514_828_346),
+    do: :trades_2_opts
+
+  def public_request(@custom_client, "Trades", pair: "BTCEUR", since: 1_514_828_346),
+    do: :trades_3
+
+  def public_request(@public_client, "Spread", pair: "BTCEUR"), do: :spread_1
+  def public_request(@custom_client, "Spread", pair: "BTCEUR"), do: :spread_2_client
+
+  def public_request(@public_client, "Spread", pair: "BTCEUR", since: 1_514_828_381),
+    do: :spread_2_opts
+
+  def public_request(@custom_client, "Spread", pair: "BTCEUR", since: 1_514_828_381),
+    do: :spread_3
 
   def private_request(client, resource, params \\ [])
 
