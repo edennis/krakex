@@ -77,4 +77,48 @@ defmodule Krakex.TestAPI do
 
   def private_request(@custom_client, "QueryOrders", txid: ["OQFZXP-DJRW3-LDF7J5"], trades: true),
     do: :query_orders_3
+
+  def private_request(@private_client, "TradesHistory", ofs: 10), do: :trades_history_1
+
+  def private_request(@custom_client, "TradesHistory", ofs: 10), do: :trades_history_2_client
+
+  def private_request(@private_client, "TradesHistory", ofs: 10, trades: true),
+    do: :trades_history_2_opts
+
+  def private_request(@custom_client, "TradesHistory", ofs: 10, trades: true),
+    do: :trades_history_3
+
+  def private_request(@private_client, "QueryTrades", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :query_trades_1
+
+  def private_request(@custom_client, "QueryTrades", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :query_trades_2_client
+
+  def private_request(@private_client, "QueryTrades", txid: ["OQFZXP-DJRW3-LDF7J5"], trades: true),
+    do: :query_trades_2_opts
+
+  def private_request(@custom_client, "QueryTrades", txid: ["OQFZXP-DJRW3-LDF7J5"], trades: true),
+    do: :query_trades_3
+
+  def private_request(@private_client, "OpenPositions", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :open_positions_1
+
+  def private_request(@custom_client, "OpenPositions", txid: ["OQFZXP-DJRW3-LDF7J5"]),
+    do: :open_positions_2_client
+
+  def private_request(
+        @private_client,
+        "OpenPositions",
+        txid: ["OQFZXP-DJRW3-LDF7J5"],
+        docalcs: true
+      ),
+      do: :open_positions_2_opts
+
+  def private_request(
+        @custom_client,
+        "OpenPositions",
+        txid: ["OQFZXP-DJRW3-LDF7J5"],
+        docalcs: true
+      ),
+      do: :open_positions_3
 end

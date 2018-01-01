@@ -190,6 +190,58 @@ defmodule KrakexTest do
       assert client() |> Krakex.query_orders(["OQFZXP-DJRW3-LDF7J5"], trades: true) ==
                :query_orders_3
     end
+
+    test "trades_history/1" do
+      assert Krakex.trades_history(10) == :trades_history_1
+    end
+
+    test "trades_history/2 client" do
+      assert client() |> Krakex.trades_history(10) == :trades_history_2_client
+    end
+
+    test "trades_history/2 opts" do
+      assert Krakex.trades_history(10, trades: true) == :trades_history_2_opts
+    end
+
+    test "trades_history/3" do
+      assert client() |> Krakex.trades_history(10, trades: true) == :trades_history_3
+    end
+
+    test "query_trades/1" do
+      assert Krakex.query_trades(["OQFZXP-DJRW3-LDF7J5"]) == :query_trades_1
+    end
+
+    test "query_trades/2 client" do
+      assert client() |> Krakex.query_trades(["OQFZXP-DJRW3-LDF7J5"]) == :query_trades_2_client
+    end
+
+    test "query_trades/2 opts" do
+      assert Krakex.query_trades(["OQFZXP-DJRW3-LDF7J5"], trades: true) == :query_trades_2_opts
+    end
+
+    test "query_trades/3" do
+      assert client() |> Krakex.query_trades(["OQFZXP-DJRW3-LDF7J5"], trades: true) ==
+               :query_trades_3
+    end
+
+    test "open_positions/1" do
+      assert Krakex.open_positions(["OQFZXP-DJRW3-LDF7J5"]) == :open_positions_1
+    end
+
+    test "open_positions/2 client" do
+      assert client() |> Krakex.open_positions(["OQFZXP-DJRW3-LDF7J5"]) ==
+               :open_positions_2_client
+    end
+
+    test "open_positions/2 opts" do
+      assert Krakex.open_positions(["OQFZXP-DJRW3-LDF7J5"], docalcs: true) ==
+               :open_positions_2_opts
+    end
+
+    test "open_positions/3" do
+      assert client() |> Krakex.open_positions(["OQFZXP-DJRW3-LDF7J5"], docalcs: true) ==
+               :open_positions_3
+    end
   end
 
   defp client, do: TestAPI.custom_client()

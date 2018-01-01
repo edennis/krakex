@@ -7,6 +7,8 @@ defmodule Krakex do
 
   @api Application.get_env(:krakex, :api_mod, Krakex.API)
 
+  # public market data
+
   def server_time(client \\ @api.public_client()) do
     @api.public_request(client, "Time")
   end
@@ -76,6 +78,8 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "Spread", [pair: pair] ++ opts)
   end
 
+  # private user data
+
   def balance(client \\ @api.private_client()) do
     @api.private_request(client, "Balance")
   end
@@ -120,16 +124,34 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "QueryOrders", [txid: tx_ids] ++ opts)
   end
 
-  def trades_history(client \\ @api.private_client(), opts) do
-    @api.private_request(client, "TradesHistory", opts)
+  def trades_history(client \\ @api.private_client(), offset, opts \\ [])
+
+  def trades_history(%Client{} = client, offset, opts) do
+    @api.private_request(client, "TradesHistory", [ofs: offset] ++ opts)
   end
 
-  def query_trades(client \\ @api.private_client(), tx_ids, opts) do
+  def trades_history(offset, opts, []) do
+    @api.private_request(@api.private_client(), "TradesHistory", [ofs: offset] ++ opts)
+  end
+
+  def query_trades(client \\ @api.private_client(), tx_ids, opts \\ [])
+
+  def query_trades(%Client{} = client, tx_ids, opts) when is_list(opts) do
     @api.private_request(client, "QueryTrades", [txid: tx_ids] ++ opts)
   end
 
-  def open_positions(client \\ @api.private_client(), tx_ids, opts) do
+  def query_trades(tx_ids, opts, []) do
+    @api.private_request(@api.private_client(), "QueryTrades", [txid: tx_ids] ++ opts)
+  end
+
+  def open_positions(client \\ @api.private_client(), tx_ids, opts \\ [])
+
+  def open_positions(%Client{} = client, tx_ids, opts) when is_list(opts) do
     @api.private_request(client, "OpenPositions", [txid: tx_ids] ++ opts)
+  end
+
+  def open_positions(tx_ids, opts, []) do
+    @api.private_request(@api.private_client(), "OpenPositions", [txid: tx_ids] ++ opts)
   end
 
   def ledgers(client \\ @api.private_client(), opts) do
@@ -144,5 +166,18 @@ defmodule Krakex do
     @api.private_request(client, "TradeVolume", [])
   end
 
-  # TODO: add_order, cancel_order
+  # private user trading
+
+  # TODO: add_order
+  # TODO: cancel_order
+
+  # private user funding
+
+  # TODO: deposit_methods
+  # TODO: deposit_addresses
+  # TODO: deposit_status
+  # TODO: withdrawal_info
+  # TODO: withdraw
+  # TODO: withdrawal_status
+  # TODO: cancel_withdrawal
 end
