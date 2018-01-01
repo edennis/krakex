@@ -23,6 +23,10 @@ defmodule Krakex.TestAPI do
   def public_request(@custom_client, "AssetPairs", pair: ["BTCEUR"]), do: :asset_pairs_2
   def public_request(@public_client, "Ticker", pair: ["BTC"]), do: :ticker_1
   def public_request(@custom_client, "Ticker", pair: ["BTC"]), do: :ticker_2
+  def public_request(@public_client, "OHLC", pair: "BTCEUR"), do: :ohlc_1
+  def public_request(@custom_client, "OHLC", pair: "BTCEUR"), do: :ohlc_2_client
+  def public_request(@public_client, "OHLC", pair: "BTCEUR", interval: 5), do: :ohlc_2_opts
+  def public_request(@custom_client, "OHLC", pair: "BTCEUR", interval: 5), do: :ohlc_3
 
   def private_request(client, resource, params \\ [])
 

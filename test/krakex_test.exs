@@ -51,6 +51,22 @@ defmodule KrakexTest do
     test "ticker/2" do
       assert client() |> Krakex.ticker(["BTC"]) == :ticker_2
     end
+
+    test "ohlc/1" do
+      assert Krakex.ohlc("BTCEUR") == :ohlc_1
+    end
+
+    test "ohlc/2 client" do
+      assert client() |> Krakex.ohlc("BTCEUR") == :ohlc_2_client
+    end
+
+    test "ohlc/2 opts" do
+      assert Krakex.ohlc("BTCEUR", interval: 5) == :ohlc_2_opts
+    end
+
+    test "ohlc/3" do
+      assert client() |> Krakex.ohlc("BTCEUR", interval: 5) == :ohlc_3
+    end
   end
 
   describe "private user data" do

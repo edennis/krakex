@@ -36,8 +36,14 @@ defmodule Krakex do
   end
 
   # An open-high-low-close chart (also OHLC) is a type of chart typically used to illustrate movements in the price of a financial instrument over time. Each vertical line on the chart shows the price range (the highest and lowest prices) over one unit of time, e.g., one day or one hour
-  def ohlc(client \\ @api.public_client(), pair, opts \\ []) do
+  def ohlc(client \\ @api.public_client(), pair, opts \\ [])
+
+  def ohlc(%Client{} = client, pair, opts) when is_list(opts) do
     @api.public_request(client, "OHLC", [pair: pair] ++ opts)
+  end
+
+  def ohlc(pair, opts, []) do
+    @api.public_request(@api.public_client(), "OHLC", [pair: pair] ++ opts)
   end
 
   def depth(client \\ @api.public_client(), pair, opts \\ []) do
