@@ -11,10 +11,10 @@ defmodule Krakex.HTTPClient do
   @headers [{"accept", "application/json"}]
   @post_headers @headers ++ [{"content-type", "application/x-www-form-urlencoded"}]
 
-  @spec get(url :: String.t(), headers :: list, opts :: list, client :: module) :: response
-  def get(url, headers, opts, client \\ @client)
-      when is_binary(url) and is_list(headers) and is_list(opts) do
-    response = client.get(url, headers ++ @headers, opts)
+  @spec get(url :: String.t(), params :: keyword, headers :: list, client :: module) :: response
+  def get(url, params, headers, client \\ @client)
+      when is_binary(url) and is_list(params) and is_list(headers) do
+    response = client.get(url, headers ++ @headers, params: params)
     handle_response(response)
   end
 

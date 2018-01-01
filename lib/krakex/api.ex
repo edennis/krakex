@@ -4,12 +4,10 @@ defmodule Krakex.API do
   @public_path "/0/public/"
   @private_path "/0/private/"
 
-  def public_request(%Client{http_client: http_client} = client, resource, opts \\ []) do
+  def public_request(%Client{http_client: http_client} = client, resource, params \\ []) do
     url = client.endpoint <> public_path(resource)
-
-    params = process_params(opts)
-
-    response = http_client.get(url, [], params: params)
+    params = process_params(params)
+    response = http_client.get(url, params, [])
     handle_http_response(response)
   end
 
@@ -17,14 +15,14 @@ defmodule Krakex.API do
     defexception [:message]
   end
 
-  def private_request(client, resource, opts \\ [])
+  def private_request(client, resource, params \\ [])
 
-  def private_request(%Client{key: key, secret: secret} = client, resource, opts)
+  def private_request(%Client{key: key, secret: secret} = client, resource, params)
       when is_binary(key) and is_binary(secret) do
     path = private_path(resource)
     nonce = nonce()
 
-    form_data = opts |> Keyword.put(:nonce, nonce) |> process_params()
+    form_data = params |> Keyword.put(:nonce, nonce) |> process_params()
 
     headers = [
       {"Api-Key", key},
@@ -68,9 +66,6 @@ defmodule Krakex.API do
   defp process_params(params) do
     Enum.map(params, fn {k, v} ->
       case v do
-        [] ->
-          nil
-
         v when is_list(v) ->
           {k, Enum.join(v, ",")}
 
@@ -78,6 +73,9 @@ defmodule Krakex.API do
           {k, v}
       end
     end)
-    |> Enum.reject(&is_nil/1)
+    |> Enum.reject(&is_empty/1)
   end
+
+  defp is_empty({_, v}) when v in [nil, ""], do: true
+  defp is_empty(_), do: false
 end
