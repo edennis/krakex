@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/edennis/krakex.svg?branch=master)](https://travis-ci.org/edennis/krakex)
-
 # Krakex
+
+[![Build Status](https://travis-ci.org/edennis/krakex.svg?branch=master)](https://travis-ci.org/edennis/krakex)
+[![Coverage Status](https://coveralls.io/repos/github/edennis/krakex/badge.svg?branch=master)](https://coveralls.io/github/edennis/krakex?branch=master)
 
 Elixir client for the [Kraken Bitcoin Exchange API](https://www.kraken.com/help/api)
 

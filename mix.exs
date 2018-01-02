@@ -8,7 +8,8 @@ defmodule Krakex.Mixfile do
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -25,6 +26,7 @@ defmodule Krakex.Mixfile do
     [
       {:httpoison, "~> 0.13"},
       {:poison, "~> 3.1"},
+      {:excoveralls, "~> 0.8", only: :test},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false}
     ]
   end
