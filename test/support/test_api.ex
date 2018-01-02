@@ -129,4 +129,10 @@ defmodule Krakex.TestAPI do
   def private_request(@private_client, "Ledgers", ofs: 10, type: "trade"), do: :ledgers_2_opts
 
   def private_request(@custom_client, "Ledgers", ofs: 10, type: "trade"), do: :ledgers_3
+
+  def private_request(@private_client, "QueryLedgers", id: ["LTD2YN-UUDTH-C5NPDX"]),
+    do: :query_ledgers_1
+
+  def private_request(@custom_client, "QueryLedgers", id: ["LTD2YN-UUDTH-C5NPDX"]),
+    do: :query_ledgers_2
 end

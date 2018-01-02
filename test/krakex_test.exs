@@ -258,6 +258,14 @@ defmodule KrakexTest do
     test "ledgers/3" do
       assert client() |> Krakex.ledgers(10, type: "trade") == :ledgers_3
     end
+
+    test "query_ledgers/1" do
+      assert Krakex.query_ledgers(["LTD2YN-UUDTH-C5NPDX"]) == :query_ledgers_1
+    end
+
+    test "query_ledgers/2" do
+      assert client() |> Krakex.query_ledgers(["LTD2YN-UUDTH-C5NPDX"]) == :query_ledgers_2
+    end
   end
 
   defp client, do: TestAPI.custom_client()

@@ -164,8 +164,8 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "Ledgers", [ofs: offset] ++ opts)
   end
 
-  def query_ledgers(client \\ @api.private_client(), ids) do
-    @api.private_request(client, "QueryLedgers", id: ids)
+  def query_ledgers(client \\ @api.private_client(), ledger_ids) do
+    @api.private_request(client, "QueryLedgers", id: ledger_ids)
   end
 
   def trade_volume(client \\ @api.private_client()) do
@@ -182,8 +182,8 @@ defmodule Krakex do
   # TODO: deposit_methods
   # TODO: deposit_addresses
   # TODO: deposit_status
-  # TODO: withdrawal_info
+  # TODO: withdraw_info
   # TODO: withdraw
-  # TODO: withdrawal_status
-  # TODO: cancel_withdrawal
+  # TODO: withdraw_status
+  # TODO: withdraw_cancel
 end
