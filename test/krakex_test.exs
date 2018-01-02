@@ -266,6 +266,22 @@ defmodule KrakexTest do
     test "query_ledgers/2" do
       assert client() |> Krakex.query_ledgers(["LTD2YN-UUDTH-C5NPDX"]) == :query_ledgers_2
     end
+
+    test "trade_volume/1" do
+      assert Krakex.trade_volume(["BTCEUR"]) == :trade_volume_1
+    end
+
+    test "trade_volume/2 client" do
+      assert client() |> Krakex.trade_volume(["BTCEUR"]) == :trade_volume_2_client
+    end
+
+    test "trade_volume/2 opts" do
+      assert Krakex.trade_volume(["BTCEUR"], "fee-info": true) == :trade_volume_2_opts
+    end
+
+    test "trade_volume/3" do
+      assert client() |> Krakex.trade_volume(["BTCEUR"], "fee-info": true) == :trade_volume_3
+    end
   end
 
   defp client, do: TestAPI.custom_client()

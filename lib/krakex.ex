@@ -168,8 +168,14 @@ defmodule Krakex do
     @api.private_request(client, "QueryLedgers", id: ledger_ids)
   end
 
-  def trade_volume(client \\ @api.private_client()) do
-    @api.private_request(client, "TradeVolume", [])
+  def trade_volume(client \\ @api.private_client(), pairs, opts \\ [])
+
+  def trade_volume(%Client{} = client, pairs, opts) when is_list(opts) do
+    @api.private_request(client, "TradeVolume", [pair: pairs] ++ opts)
+  end
+
+  def trade_volume(pairs, opts, []) do
+    @api.private_request(@api.private_client(), "TradeVolume", [pair: pairs] ++ opts)
   end
 
   # private user trading
