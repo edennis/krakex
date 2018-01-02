@@ -1,9 +1,15 @@
 defmodule Krakex.Client do
   @endpoint "https://api.kraken.com"
+  @http_client Krakex.HTTPClient
 
-  defstruct endpoint: @endpoint, key: nil, secret: nil
+  defstruct endpoint: @endpoint, http_client: @http_client, key: nil, secret: nil
 
-  @type t :: %__MODULE__{endpoint: binary, key: binary | nil, secret: binary | nil}
+  @type t :: %__MODULE__{
+          endpoint: binary,
+          http_client: module,
+          key: binary | nil,
+          secret: binary | nil
+        }
 
   @spec new() :: t
   def new(), do: %__MODULE__{}
