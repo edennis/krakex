@@ -75,8 +75,8 @@ defmodule Krakex do
 
   Takes the following keyword options:
 
-    * `:info` - info to retrieve. "info" (default)
-    * `:aclass` - asset class. "currency" (default)
+    * `:info` - info to retrieve. `"info"` (default)
+    * `:aclass` - asset class. `"currency"` (default)
     * `:asset` - list of assets to get info on. Returns all (default)
 
   Returns a map of asset names and a map of their info with the fields:
@@ -103,6 +103,53 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "Assets", opts)
   end
 
+  @doc """
+  Get tradable asset pairs.
+
+  Takes the following keyword options:
+
+    * `:info` - info to retrieve.
+      * `"info"` - all info (default).
+      * `"leverage"` - leverage info.
+      * `"fees"` - fees schedule.
+      * `"margin"` - margin info.
+    * `:pair` - list of asset pairs to get info on. Returns all (default)
+
+  Returns a map of asset pairs and a map of their info with the fields:
+
+    * `"altname"` - alternate pair name.
+    * `"aclass_base"` - asset class of base component.
+    * `"base"` - asset id of base component.
+    * `"aclass_quote"` - asset class of quote component.
+    * `"quote"` - asset id of quote component.
+    * `"lot"` - volume lot size.
+    * `"pair_decimals"` - scaling decimal places for pair.
+    * `"lot_decimals"` - scaling decimal places for volume.
+    * `"lot_multiplier"` - amount to multiply lot volume by to get currency volume.
+    * `"leverage_buy"` - array of leverage amounts available when buying.
+    * `"leverage_sell"` - array of leverage amounts available when selling.
+    * `"fees"` - fee schedule array in [volume, percent fee] tuples.
+    * `"fees_maker"` - maker fee schedule array in [volume, percent fee] tuples (if on maker/taker).
+    * `"fee_volume_currency"` - volume discount currency.
+    * `"margin_call"` - margin call level.
+    * `"margin_stop"` - stop-out/liquidation margin level.
+
+  ## Example response:
+
+      {:ok, %{"BCHEUR" => %{"aclass_base" => "currency", "aclass_quote" => "currency",
+                            "altname" => "BCHEUR", "base" => "BCH", "fee_volume_currency" => "ZUSD",
+                            "fees" => [[0, 0.26], [50000, 0.24], [100000, 0.22], [250000, 0.2],
+                            [500000, 0.18], [1000000, 0.16], [2500000, 0.14], [5000000, 0.12],
+                            [10000000, 0.1]],
+                            "fees_maker" => [[0, 0.16], [50000, 0.14], [100000, 0.12], [250000, 0.1],
+                            [500000, 0.08], [1000000, 0.06], [2500000, 0.04], [5000000, 0.02],
+                            [10000000, 0]], "leverage_buy" => [], "leverage_sell" => [],
+                            "lot" => "unit", "lot_decimals" => 8, "lot_multiplier" => 1,
+                            "margin_call" => 80, "margin_stop" => 40, "pair_decimals" => 1,
+                            "quote" => "ZEUR"}}
+
+  """
+  @spec asset_pairs(Client.t(), keyword) :: Krakex.API.response()
   def asset_pairs(client \\ @api.public_client(), opts \\ [])
 
   def asset_pairs(%Client{} = client, opts) when is_list(opts) do
@@ -113,11 +160,72 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "AssetPairs", opts)
   end
 
+  @doc """
+  Get ticker information.
+
+  Takes list of asset pairs to get info on.
+
+  Returns a map of asset pairs and a map of their ticker info with the fields:
+
+    * `"a"` - ask array(_price_, _whole lot volume_, _lot volume_).
+    * `"b"` - bid array(_price_, _whole lot volume_, _lot volume_).
+    * `"c"` - last trade closed array(_price_, _lot volume_).
+    * `"v"` - volume array(_today_, _last 24 hours_).
+    * `"p"` - volume weighted average price array(_today_, _last 24 hours_).
+    * `"t"` - number of trades array(_today_, _last 24 hours_).
+    * `"l"` - low array(_today_, _last 24 hours_).
+    * `"h"` - high array(_today_, _last 24 hours_).
+    * `"o"` - today's opening price.
+
+  ## Example response:
+
+      {:ok,
+        %{"BCHEUR" => %{"a" => ["2034.800000", "1", "1.000"],
+            "b" => ["2025.000000", "8", "8.000"], "c" => ["2025.000000", "0.03660000"],
+            "h" => ["2140.000000", "2227.600000"],
+            "l" => ["1942.000000", "1942.000000"], "o" => "2134.000000",
+            "p" => ["2021.440397", "2051.549114"], "t" => [3824, 6704],
+            "v" => ["1956.76538027", "4086.36386115"]}}}
+
+  """
+  @spec ticker(Client.t(), [binary]) :: Krakex.API.response()
   def ticker(client \\ @api.public_client(), pairs) when is_list(pairs) do
     @api.public_request(client, "Ticker", pair: pairs)
   end
 
-  # An open-high-low-close chart (also OHLC) is a type of chart typically used to illustrate movements in the price of a financial instrument over time. Each vertical line on the chart shows the price range (the highest and lowest prices) over one unit of time, e.g., one day or one hour
+  @doc """
+  Get OHLC data.
+
+  An open-high-low-close chart is a type of chart typically used to illustrate movements
+  in the price of a financial instrument over time. Each vertical line on the chart shows
+  the price range (the highest and lowest prices) over one unit of time, e.g., one day or
+  one hour Takes list of asset pairs to get info on.
+
+  Takes an asset pair and the following keyword options:
+
+    * `:interval` - time frame interval in minutes. 1 (default), 5, 15, 30, 60, 240, 1440, 10080, 21600
+    * `:since` - return committed OHLC data since given id (exclusive).
+
+  Returns a map with the asset pair and a list of lists with the entries (_time_, _open_, _high_,
+  _low_, _close_, _vwap_, _volume_, _count_) and:
+
+    * `"last"` - id to be used as since when polling for new, committed OHLC data.
+
+  **Note**: the last entry in the OHLC array is for the current, not-yet-committed frame and will
+  always be present, regardless of the value of `:since`.
+
+  ## Example response:
+
+      {:ok,
+        %{"BCHEUR" => [[1515037200, "2051.7", "2051.7", "2051.7", "2051.7", "0.0", "0.00000000", 0],
+            [1515037260, "2051.7", "2051.7", "2045.0", "2045.0", "2045.0", "0.01500000", 1],
+            [1515037320, "2045.0", "2050.8", "2045.0", "2050.8", "2050.7", "2.37135868", 2],
+            [1515037380, "2050.8", "2050.8", "2050.8", "2050.8", "0.0", "0.00000000", 0],
+            ...],
+            "last" => 1515080280}}
+
+  """
+  @spec ohlc(Client.t(), binary, keyword) :: Krakex.API.response()
   def ohlc(client \\ @api.public_client(), pair, opts \\ [])
 
   def ohlc(%Client{} = client, pair, opts) when is_list(opts) do
@@ -128,6 +236,34 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "OHLC", [pair: pair] ++ opts)
   end
 
+  @doc """
+  Get order book.
+
+  Returns the market depth for an asset pair.
+
+  Takes an asset pair and the following keyword options:
+
+    * `:count` - maximum number of asks/bids.
+
+  Returns a map of the asset pair and a map of the info with the fields:
+
+    * `"asks"` - ask side array of array entries (_price_, _volume_, _timestamp_).
+    * `"bids"` - bid side array of array entries (_price_, _volume_, _timestamp_).
+
+  ## Example response:
+
+      {:ok,
+          %{"BCHEUR" => %{"asks" => [["2033.900000", "4.937", 1515082275],
+                                    ["2034.000000", "0.548", 1515081910],
+                                    ["2034.500000", "0.005", 1515081281],
+                                    ["2034.800000", "4.637", 1515082048]],
+                          "bids" => [["2025.000000", "1.024", 1515081702],
+                                    ["2022.200000", "0.140", 1515078885],
+                                    ["2022.100000", "0.280", 1515078852],
+                                    ["2021.400000", "0.248", 1515080222]]}}}
+
+  """
+  @spec depth(Client.t(), binary, keyword) :: Krakex.API.response()
   def depth(client \\ @api.public_client(), pair, opts \\ [])
 
   def depth(%Client{} = client, pair, opts) do
