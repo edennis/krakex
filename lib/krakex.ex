@@ -1,13 +1,54 @@
 defmodule Krakex do
   @moduledoc """
-  Documentation for Krakex.
+  Kraken API Client.
+
+  The Kraken API is divided into several sections:
+
+  ## Public market data
+
+    * `server_time/1` - Get server time.
+    * `assets/2` - Get asset info.
+    * `asset_pairs/2` - Get tradable asset pairs.
+    * `ticker/2` - Get ticker information.
+    * `ohlc/3` - Get OHLC data.
+    * `depth/3` - Get order book.
+    * `trades/3` - Get recent trades.
+    * `spread/3` - Get recent spread data.
+
+  ## Private user data
+
+    * `balance/1` - Get account balance.
+    * `trade_balance/2` - Get trade balance.
+    * `open_orders/2` - Get open orders.
+    * `closed_orders/2` - Get closed orders.
+    * `query_orders/3` - Query orders info.
+    * `trades_history/2` - Get trades history.
+    * `query_trades/2` - Query trades info.
+    * `open_positions/2` - Get open positions.
+    * `ledgers/2` - Get ledgers info.
+    * `query_ledgers/2` - Query ledgers.
+    * `trade_volume/2` - Get trade volume.
+
+  ## Private user trading
+
+    * `add_order/5` (not implemented) - Add standard order.
+    * `cancel_order/2` (not implemented) - Cancel open order.
+
+  ## Private user funding
+
+    * `deposit_methods/3` (not implemented) - Get deposit methods.
+    * `deposit_addresses/4` (not implemented) - Get deposit addresses.
+    * `deposit_status/4` (not implemented) - Get status of recent deposits.
+    * `withdraw_info/5` (not implemented) - Get withdrawal information.
+    * `withdraw/5` (not implemented) - Withdraw funds.
+    * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
+    * `withdraw_cancel/4` (not implemented) - Request withdrawal cancelation.
+
   """
 
   alias Krakex.Client
 
   @api Application.get_env(:krakex, :api_mod, Krakex.API)
-
-  # public market data
 
   def server_time(client \\ @api.public_client()) do
     @api.public_request(client, "Time")
@@ -77,8 +118,6 @@ defmodule Krakex do
   def spread(pair, opts, []) do
     @api.public_request(@api.public_client(), "Spread", [pair: pair] ++ opts)
   end
-
-  # private user data
 
   def balance(client \\ @api.private_client()) do
     @api.private_request(client, "Balance")
@@ -177,19 +216,4 @@ defmodule Krakex do
   def trade_volume(pairs, opts, []) do
     @api.private_request(@api.private_client(), "TradeVolume", [pair: pairs] ++ opts)
   end
-
-  # private user trading
-
-  # TODO: add_order
-  # TODO: cancel_order
-
-  # private user funding
-
-  # TODO: deposit_methods
-  # TODO: deposit_addresses
-  # TODO: deposit_status
-  # TODO: withdraw_info
-  # TODO: withdraw
-  # TODO: withdraw_status
-  # TODO: withdraw_cancel
 end
