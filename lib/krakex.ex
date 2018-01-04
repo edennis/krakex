@@ -50,10 +50,49 @@ defmodule Krakex do
 
   @api Application.get_env(:krakex, :api_mod, Krakex.API)
 
+  @doc """
+  Get server time.
+
+  This is to aid in approximating the skew time between the server and client.
+
+  Returns a map with the fields:
+
+    * `"unixtime"` - as unix timestamp.
+    * `"rfc1123"` - as RFC 1123 time format.
+
+  ## Example response:
+
+       {:ok, %{"rfc1123" => "Thu,  4 Jan 18 14:57:58 +0000", "unixtime" => 1515077878}}
+
+  """
+  @spec server_time(Client.t()) :: Krakex.API.response()
   def server_time(client \\ @api.public_client()) do
     @api.public_request(client, "Time")
   end
 
+  @doc """
+  Get asset info.
+
+  Takes the following keyword options:
+
+    * `:info` - info to retrieve. "info" (default)
+    * `:aclass` - asset class. "currency" (default)
+    * `:asset` - list of assets to get info on. Returns all (default)
+
+  Returns a map of asset names and a map of their info with the fields:
+
+    * `"altname"` - alternate name.
+    * `"aclass"` - asset class.
+    * `"decimals"` - scaling decimal places for record keeping.
+    * `"display_decimals"` - scaling decimal places for output display.
+
+  ## Example response:
+
+      {:ok, %{"BCH" => %{"aclass" => "currency", "altname" => "BCH",
+                         "decimals" => 10, "display_decimals" => 5}}}
+
+  """
+  @spec assets(Client.t(), keyword) :: Krakex.API.response()
   def assets(client \\ @api.public_client(), opts \\ [])
 
   def assets(%Client{} = client, opts) when is_list(opts) do
