@@ -3,13 +3,6 @@ defmodule Krakex.ClientTest do
 
   alias Krakex.Client
 
-  describe "new/0" do
-    test "default endpoint" do
-      client = Client.new()
-      assert client.endpoint == "https://api.kraken.com"
-    end
-  end
-
   describe "new/2" do
     test "valid params" do
       secret = Base.encode64("foo")

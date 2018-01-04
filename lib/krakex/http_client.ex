@@ -1,10 +1,6 @@
 defmodule Krakex.HTTPClient do
-  @moduledoc """
-  This module abstracts the usage of the underlying http client and additionally takes care of
-  decoding JSON as well as HTTP error handling.
-  """
+  @moduledoc false
 
-  @typedoc "The client's return type"
   @type response :: {:ok, term} | {:error, term}
 
   @client HTTPoison

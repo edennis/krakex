@@ -110,7 +110,7 @@ defmodule Krakex.APITest do
   end
 
   test "public_client/0" do
-    assert API.public_client() == Client.new()
+    assert API.public_client() == %Client{}
   end
 
   describe "private_client/0" do
