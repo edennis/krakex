@@ -1,9 +1,22 @@
 defmodule Krakex.API do
+  @moduledoc """
+  Access to public and private APIs.
+
+  This module defines functions for building calls for the public and private
+  APIs and handles things such as request signing.
+  """
+
+  @type response :: {:ok, term} | {:error, any}
+
   alias Krakex.Client
 
   @public_path "/0/public/"
   @private_path "/0/private/"
 
+  @doc """
+  Access public API calls.
+  """
+  @spec public_request(Client.t(), binary, keyword) :: response
   def public_request(%Client{http_client: http_client} = client, resource, params \\ []) do
     url = client.endpoint <> public_path(resource)
     params = process_params(params)
@@ -12,13 +25,32 @@ defmodule Krakex.API do
   end
 
   defmodule MissingConfigError do
+    @moduledoc """
+    Error raised when attempting to use private API functions without having specified
+    values for the API and/or private keys.
+    """
+
     defexception [:message]
   end
 
   defmodule MissingCredentialsError do
+    @moduledoc """
+    Error raised when attempting to use private API functions and the `Krakex.Client` struct
+    didn't specify values for the API and/or private keys.
+    """
+
     defexception [:message]
   end
 
+  @doc """
+  Access private API calls.
+
+  It signs requests using the API and private keys.
+
+  It will raise a `Krakex.API.MissingCredentialsError` if provided a `Krakex.Client` struct
+  without values for either the API or private keys.
+  """
+  @spec private_request(Client.t(), binary, keyword) :: response
   def private_request(client, resource, params \\ [])
 
   def private_request(%Client{key: key, secret: secret} = client, resource, params)
@@ -41,10 +73,18 @@ defmodule Krakex.API do
     raise MissingCredentialsError, message: "the client is missing values for :key and/or :secret"
   end
 
+  @doc """
+  Returns default `Krakex.Client` struct for accessing the public API.
+  """
+  @spec public_client() :: Client.t()
   def public_client do
-    Client.new()
+    %Client{}
   end
 
+  @doc """
+  Returns default `Krakex.Client` struct for accessing the private API.
+  """
+  @spec private_client() :: Client.t()
   def private_client do
     config = Application.get_all_env(:krakex)
 

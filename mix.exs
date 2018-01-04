@@ -27,7 +27,8 @@ defmodule Krakex.Mixfile do
       {:httpoison, "~> 0.13"},
       {:poison, "~> 3.1"},
       {:excoveralls, "~> 0.8", only: :test},
-      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
 end

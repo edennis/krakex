@@ -1,4 +1,17 @@
 defmodule Krakex.Client do
+  @moduledoc """
+  The Krakex client.
+
+  This modules defines a `Krakex.Client` struct which is needed to use any
+  of the functions defined in the `Krakex` module.
+
+  It contains the following fields:
+
+    * `key` - the API key.
+    * `secret` - the private API key.
+    * `endpoint` - the base URL of the API (default: `"https://api.kraken.com"`).
+  """
+
   @endpoint "https://api.kraken.com"
   @http_client Krakex.HTTPClient
 
@@ -11,9 +24,13 @@ defmodule Krakex.Client do
           secret: binary | nil
         }
 
-  @spec new() :: t
-  def new(), do: %__MODULE__{}
+  @doc """
+  Returns a `Krakex.Client` struct.
 
+  It takes care of initializing the values for the API and private keys.
+
+  The `endpoint` argument can optionally be set.
+  """
   @spec new(binary, binary, binary) :: t
   def new(api_key, private_key, endpoint \\ @endpoint)
       when is_binary(api_key) and is_binary(private_key) and is_binary(endpoint) do
