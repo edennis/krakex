@@ -274,6 +274,32 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "Depth", [pair: pair] ++ opts)
   end
 
+  @doc """
+  Get recent trades.
+
+  Returns the trade data for an asset pair.
+
+  Takes an asset pair and the following keyword options:
+
+    * `:since` - return committed OHLC data since given id (exclusive).
+
+  Returns a map with the asset pair and a list of lists with the entries (_price_, _volume_, _time_,
+  _buy/sell_, _market/limit_, _miscellaneous_) and:
+
+    * `"last"` - id to be used as since when polling for new trade data.
+
+  ## Example response:
+
+      {:ok,
+        %{"BCHEUR" => [["2008.100000", "0.09000000", 1515066097.1379, "b", "m", ""],
+                      ["2008.200000", "0.24850000", 1515066097.1663, "b", "m", ""],
+                      ["2008.300000", "4.36233575", 1515066097.1771, "b", "m", ""],
+                      ["2005.000000", "0.04107303", 1515066117.0598, "s", "l", ""],
+                      ["2008.000000", "0.07700000", 1515066117.389, "b", "l", ""],
+        "last" => "1515076587511702121"}}
+
+  """
+  @spec trades(Client.t(), binary, keyword) :: Krakex.API.response()
   def trades(client \\ @api.public_client(), pair, opts \\ [])
 
   def trades(%Client{} = client, pair, opts) do
@@ -284,6 +310,33 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "Trades", [pair: pair] ++ opts)
   end
 
+  @doc """
+  Get recent spread data.
+
+  Returns the spread data for an asset pair.
+
+  Takes an asset pair and the following keyword options:
+
+    * `:since` - return spread data since given id (inclusive).
+
+  Returns a map with the asset pair and a list of lists with the entries
+  (_time_, _bid_, _ask_) and:
+
+    * `"last"` - id to be used as since when polling for new trade data.
+
+  ## Example response:
+
+      {:ok,
+        %{"BCHEUR" => [[1515079584, "2025.000000", "2025.000000"],
+                      [1515079584, "2025.000000", "2036.100000"],
+                      [1515079594, "2025.000000", "2025.000000"],
+                      [1515079596, "2025.000000", "2026.000000"],
+                      [1515080461, "2025.500000", "2034.100000"],
+                      [1515080462, "2025.000000", "2034.100000"]],
+          "last" => 1515083299}}
+
+  """
+  @spec spread(Client.t(), binary, keyword) :: Krakex.API.response()
   def spread(client \\ @api.public_client(), pair, opts \\ [])
 
   def spread(%Client{} = client, pair, opts) do
