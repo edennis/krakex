@@ -347,10 +347,51 @@ defmodule Krakex do
     @api.public_request(@api.public_client(), "Spread", [pair: pair] ++ opts)
   end
 
+  @doc """
+  Get account balance.
+
+  Returns a map with the asset names and balance amount.
+
+  ## Example response:
+
+      {:ok, %{"XXBT" => "0.0400000000", "XXRP" => "160.00000000", "ZEUR" => "67.6613"}}
+
+  """
+  @spec balance(Client.t()) :: Krakex.API.response()
   def balance(client \\ @api.private_client()) do
     @api.private_request(client, "Balance")
   end
 
+  @doc """
+  Get trade balance.
+
+  Takes the following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+    * `:asset` - base asset used to determine balance. `"ZUSD"` (default)
+
+  Returns a map with the fields:
+
+    * `"eb"` - equivalent balance (combined balance of all currencies).
+    * `"tb"` - trade balance (combined balance of all equity currencies).
+    * `"m"` - margin amount of open positions.
+    * `"n"` - unrealized net profit/loss of open positions.
+    * `"c"` - cost basis of open positions.
+    * `"v"` - current floating valuation of open positions.
+    * `"e"` - equity = trade balance + unrealized net profit/loss.
+    * `"mf"` - free margin = equity - initial margin (maximum margin available to open new positions).
+    * `"ml"` - margin level = (equity / initial margin) * 100.
+
+  **Note**: Rates used for the floating valuation is the midpoint of the best bid and ask prices.
+
+  ## Example response:
+
+      {:ok,
+        %{"c" => "0.0000", "e" => "725.4974", "eb" => "1177.9857", "m" => "0.0000",
+          "mf" => "725.4974", "n" => "0.0000", "tb" => "725.4974", "v" => "0.0000"}}
+
+  """
+  @spec trade_balance(Client.t(), keyword) :: Krakex.API.response()
   def trade_balance(client \\ @api.private_client(), opts \\ [])
 
   def trade_balance(%Client{} = client, opts) do
