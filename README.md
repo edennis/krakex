@@ -32,10 +32,25 @@ config :krakex,
 
 ## Usage
 
-
+The entire functionality of the API can be accessed via the `Krakex` module. To get started just
+configure your API credentials as described above and call the functions:
 
 ```elixir
+iex(1)> Krakex.balance()
+{:ok,
+ %{"BCH" => "0.0000000000", "XETH" => "0.0000000000", "ZEUR" => "50.00"}}
+```
 
+If you need to use multiple Kraken accounts in your application this can be achieved by explicitly
+defining `Krakex.Client` structs and passing them as the first argument to any of the functions
+defined in the `Krakex` module:
+
+```elixir
+client1 = Krakex.Client.new("api_key1", "secret1")
+client2 = Krakex.Client.new("api_key2", "secret2")
+
+balance1 = client1 |> Krakex.trade_balance(asset: "ZUSD")
+balance2 = client2 |> Krakex.trade_balance(asset: "EUR")
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
