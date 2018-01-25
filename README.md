@@ -5,10 +5,13 @@
 
 Elixir client for the [Kraken Bitcoin Exchange API](https://www.kraken.com/help/api)
 
+> Note that this README refers to the `master` branch of Krakex, not the latest
+  released version on Hex. See [the documentation](http://hexdocs.pm/krakex) for
+  the documentation of the version you're using.
+
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `krakex` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `krakex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
