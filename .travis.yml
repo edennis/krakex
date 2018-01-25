@@ -13,4 +13,5 @@ env:
   - MIX_ENV=test
 script:
   - mix coveralls.travis || travis_terminate 1
+  - mix dialyzer --halt-exit-status || travis_terminate 1
   - mix format --dry-run --check-formatted
