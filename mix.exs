@@ -8,7 +8,10 @@ defmodule Krakex.Mixfile do
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
       deps: deps(),
+      source_url: github_url(),
       test_coverage: [tool: ExCoveralls]
     ]
   end
@@ -31,5 +34,21 @@ defmodule Krakex.Mixfile do
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
+  end
+
+  defp description() do
+    "Elixir client for the Kraken Bitcoin Exchange API."
+  end
+
+  defp package() do
+    [
+      maintainers: ["Erick Dennis"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => github_url()}
+    ]
+  end
+
+  defp github_url do
+    "https://github.com/edennis/krakex"
   end
 end
