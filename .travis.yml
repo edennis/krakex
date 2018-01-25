@@ -1,18 +1,16 @@
 language: elixir
 sudo: false
-
-matrix:
-  include:
-    - otp_release: 19.3
-      elixir: 1.4
-    - otp_release: 20.1
-      elixir: 1.4
-    - otp_release: 19.3
-      elixir: 1.5
-    - otp_release: 20.1
-      elixir: 1.5
-
+group: edge
+elixir:
+  - 1.6.0
+otp_release:
+  - 20.2
+cache:
+  directories:
+    - _build
+    - deps
 env:
   - MIX_ENV=test
-
-script: mix coveralls.travis
+script:
+  - mix coveralls.travis || travis_terminate 1
+  - mix format --dry-run --check-formatted
