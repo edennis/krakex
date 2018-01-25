@@ -36,10 +36,10 @@ defmodule Krakex do
 
   ## Private user funding
 
-    * `deposit_methods/3` (not implemented) - Get deposit methods.
+    * `deposit_methods/3` - Get deposit methods.
     * `deposit_addresses/4` (not implemented) - Get deposit addresses.
     * `deposit_status/4` (not implemented) - Get status of recent deposits.
-    * `withdraw_info/5` (not implemented) - Get withdrawal information.
+    * `withdraw_info/5` - Get withdrawal information.
     * `withdraw/5` (not implemented) - Withdraw funds.
     * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
     * `withdraw_cancel/4` (not implemented) - Request withdrawal cancelation.
@@ -616,7 +616,7 @@ defmodule Krakex do
       * `"closed position"` - positions that have been closed.
       * `"closing position"` - any trade closing all or part of a position.
       * `"no position"` - non-positional trades.
-    * `:trades` - whether or not to include trades related to position in output. (default = false)
+    * `:trades` - whether or not to include trades related to position in output. (default: `false`)
     * `:start` - starting unix timestamp or trade tx id of results. (exclusive)
     * `:end` - ending unix timestamp or trade tx id of results. (inclusive)
 
@@ -691,7 +691,7 @@ defmodule Krakex do
 
   Takes a list of (maximum 20) tx_ids and the following keyword options:
 
-    * `:trades` - whether or not to include trades related to position in output. (default = false)
+    * `:trades` - whether or not to include trades related to position in output. (default: `false`)
 
   Returns a map with the same fields as described in `trades_history/2`.
   """
@@ -711,7 +711,7 @@ defmodule Krakex do
 
   Takes a list of tx_ids to restrict output to and the following keyword options:
 
-    * `:docalcs` - whether or not to include profit/loss calculations. (default = false)
+    * `:docalcs` - whether or not to include profit/loss calculations. (default: `false`)
 
   Returns a map with the txid as the key and the value is a map with fields:
 
@@ -946,5 +946,73 @@ defmodule Krakex do
   @spec cancel_order(Client.t(), binary) :: Krakex.API.response()
   def cancel_order(client \\ @api.private_client(), tx_id) do
     @api.private_request(client, "CancelOrder", txid: tx_id)
+  end
+
+  @doc """
+  Get deposit methods.
+
+  Takes an asset and the following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+
+  Returns a list of maps with the following fields:
+
+    * `"method"` - name of deposit method.
+    * `"limit"` - maximum net amount that can be deposited right now, or `false` if no limit.
+    * `"fee"` - amount of fees that will be paid.
+    * `"address-setup-fee"` - whether or not method has an address setup fee (optional).
+
+  ## Example response:
+
+      {:ok, [%{"fee" => "5.00", "limit" => "25000.00", "method" => "SynapsePay (US Wire)"}]}
+
+  """
+  @spec deposit_methods(Client.t(), binary, keyword) :: Krakex.API.response()
+  def deposit_methods(client \\ @api.private_client(), asset, opts \\ [])
+
+  def deposit_methods(%Client{} = client, asset, opts) when is_list(opts) do
+    @api.private_request(client, "DepositMethods", [asset: asset] ++ opts)
+  end
+
+  def deposit_methods(asset, opts, []) do
+    @api.private_request(@api.private_client(), "DepositMethods", [asset: asset] ++ opts)
+  end
+
+  @doc """
+  Get withdrawal information.
+
+  Takes an asset, the withdrawal key name as set up in your account, an amount to withdraw and the
+  following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+
+  Returns a map with the following fields:
+
+    * `"method"` - name of the withdrawal method that will be used.
+    * `"limit"` - maximum net amount that can be withdrawn right now.
+    * `"fee"` - amount of fees that will be paid.
+
+  ## Example response:
+
+      {:ok,
+        %{
+          "amount" => "0.10670000",
+          "fee" => "0.00100000",
+          "limit" => "0.10770000",
+          "method" => "Bitcoin"
+        }}
+
+  """
+  @spec withdraw_info(Client.t(), binary, binary, binary, keyword) :: Krakex.API.response()
+  def withdraw_info(client \\ @api.private_client(), asset, key, amount, opts \\ [])
+
+  def withdraw_info(%Client{} = client, asset, key, amount, opts) when is_list(opts) do
+    opts = [asset: asset, key: key, amount: amount] ++ opts
+    @api.private_request(client, "WithdrawInfo", opts)
+  end
+
+  def withdraw_info(asset, key, amount, opts, []) do
+    opts = [asset: asset, key: key, amount: amount] ++ opts
+    @api.private_request(@api.private_client(), "WithdrawInfo", opts)
   end
 end

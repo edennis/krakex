@@ -309,5 +309,43 @@ defmodule KrakexTest do
     end
   end
 
+  describe "private user funding" do
+    test "deposit_methods/1" do
+      assert Krakex.deposit_methods("EUR") == {:ok, :deposit_methods_1}
+    end
+
+    test "deposit_methods/2 client" do
+      assert client() |> Krakex.deposit_methods("EUR") == {:ok, :deposit_methods_2_client}
+    end
+
+    test "deposit_methods/2 opts" do
+      assert Krakex.deposit_methods("EUR", aclass: "currency") == {:ok, :deposit_methods_2_opts}
+    end
+
+    test "deposit_methods/3" do
+      assert client() |> Krakex.deposit_methods("EUR", aclass: "currency") ==
+               {:ok, :deposit_methods_3}
+    end
+
+    test "withdraw_info/3" do
+      assert Krakex.withdraw_info("BTC", "my_wallet", "0.5") == {:ok, :withdraw_info_3}
+    end
+
+    test "withdraw_info/4 client" do
+      assert client() |> Krakex.withdraw_info("BTC", "my_wallet", "0.25") ==
+               {:ok, :withdraw_info_4_client}
+    end
+
+    test "withdraw_info/4 opts" do
+      assert Krakex.withdraw_info("BTC", "my_wallet", "0.75", aclass: "currency") ==
+               {:ok, :withdraw_info_4_opts}
+    end
+
+    test "withdraw_info/5" do
+      assert client() |> Krakex.withdraw_info("BTC", "my_wallet", "0.15", aclass: "currency") ==
+               {:ok, :withdraw_info_5}
+    end
+  end
+
   defp client, do: TestAPI.custom_client()
 end
