@@ -5,10 +5,12 @@ elixir:
   - 1.6.0
 otp_release:
   - 20.2
-
+cache:
+  directories:
+    - _build
+    - deps
 env:
   - MIX_ENV=test
-
 script:
   - mix coveralls.travis || travis_terminate 1
   - mix format --dry-run --check-formatted
