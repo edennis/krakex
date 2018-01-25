@@ -73,17 +73,13 @@ defmodule Krakex.API do
     raise MissingCredentialsError, message: "the client is missing values for :key and/or :secret"
   end
 
-  @doc """
-  Returns default `Krakex.Client` struct for accessing the public API.
-  """
+  @doc false
   @spec public_client() :: Client.t()
   def public_client do
     %Client{}
   end
 
-  @doc """
-  Returns default `Krakex.Client` struct for accessing the private API.
-  """
+  @doc false
   @spec private_client() :: Client.t()
   def private_client do
     config = Application.get_all_env(:krakex)
