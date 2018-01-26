@@ -22,7 +22,7 @@ defmodule Krakex do
     * `open_orders/2` - Get open orders.
     * `closed_orders/2` - Get closed orders.
     * `query_orders/3` - Query orders info.
-    * `trades_history/2` - Get trades history.
+    * `trades_history/3` - Get trades history.
     * `query_trades/3` - Query trades info.
     * `open_positions/3` - Get open positions.
     * `ledgers/3` - Get ledgers info.
