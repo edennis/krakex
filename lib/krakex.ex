@@ -799,14 +799,44 @@ defmodule Krakex do
     @api.private_request(client, "QueryLedgers", id: ledger_ids)
   end
 
-  @spec trade_volume(Client.t(), [binary], keyword) :: Krakex.API.response()
-  def trade_volume(client \\ @api.private_client(), pairs, opts \\ [])
+  @doc """
+  Get trade volume.
 
-  def trade_volume(%Client{} = client, pairs, opts) when is_list(opts) do
-    @api.private_request(client, "TradeVolume", [pair: pairs] ++ opts)
+  Takes the following keyword options:
+
+    * `:pair` - list of asset pairs to get fee info on.
+    * `:"fee-info"` - whether or not to include fee info in results.
+
+  Returns a map with the following fields:
+
+    * `"currency"` - volume currency.
+    * `"volume"` - current discount volume.
+    * `"fees"` - map of asset pairs and fee tier info (if requested):
+      * `"fee"` - current fee in percent.
+      * `"minfee"` - minimum fee for pair (if not fixed fee).
+      * `"maxfee"` - maximum fee for pair (if not fixed fee).
+      * `"nextfee"` - next tier's fee for pair (if not fixed fee. `nil` if at lowest fee tier).
+      * `"nextvolume"` - volume level of next tier (if not fixed fee. `nil` if at lowest fee tier).
+      * `"tiervolume"` - volume level of current tier (if not fixed fee. `nil` if at lowest fee tier).
+    * `"fees_maker"` - map of asset pairs and maker fee tier info (if requested) for any pairs on maker/taker schedule:
+      * `"fee"` - current fee in percent.
+      * `"minfee"` - minimum fee for pair (if not fixed fee).
+      * `"maxfee"` - maximum fee for pair (if not fixed fee).
+      * `"nextfee"` - next tier's fee for pair (if not fixed fee. `nil` if at lowest fee tier).
+      * `"nextvolume"` - volume level of next tier (if not fixed fee. `nil` if at lowest fee tier).
+      * `"tiervolume"` - volume level of current tier (if not fixed fee. `nil` if at lowest fee tier).
+
+  Note: If an asset pair is on a maker/taker fee schedule, the taker side is given in `"fees"` and
+  maker side in `"fees_maker"`. For pairs not on maker/taker, they will only be given in `"fees"`.
+  """
+  @spec trade_volume(Client.t(), keyword) :: Krakex.API.response()
+  def trade_volume(client \\ @api.private_client(), opts \\ [])
+
+  def trade_volume(%Client{} = client, opts) when is_list(opts) do
+    @api.private_request(client, "TradeVolume", opts)
   end
 
-  def trade_volume(pairs, opts, []) do
-    @api.private_request(@api.private_client(), "TradeVolume", [pair: pairs] ++ opts)
+  def trade_volume(opts, []) do
+    @api.private_request(@api.private_client(), "TradeVolume", opts)
   end
 end
