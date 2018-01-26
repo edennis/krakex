@@ -605,6 +605,76 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "QueryOrders", [txid: tx_ids] ++ opts)
   end
 
+  @doc """
+  Get trades history.
+
+  Takes an offset and the following keyword options:
+
+    * `:type` - type of trade:
+      * `"all"` - all types. (default)
+      * `"any position"` - any position (open or closed).
+      * `"closed position"` - positions that have been closed.
+      * `"closing position"` - any trade closing all or part of a position.
+      * `"no position"` - non-positional trades.
+    * `:trades` - whether or not to include trades related to position in output. (default = false)
+    * `:start` - starting unix timestamp or trade tx id of results. (exclusive)
+    * `:end` - ending unix timestamp or trade tx id of results. (inclusive)
+
+  Returns a map with the fields `"trades"` and `"count"`. The map of trades has the txid as the key
+  and the value is a map with fields:
+
+    * `"ordertxid"` - order responsible for execution of trade.
+    * `"pair"` - asset pair.
+    * `"time"` - unix timestamp of trade.
+    * `"type"` - type of order (buy/sell).
+    * `"ordertype"` - order type.
+    * `"price"` - average price order was executed at (quote currency).
+    * `"cost"` - total cost of order (quote currency).
+    * `"fee"` - total fee (quote currency).
+    * `"vol"` - volume (base currency).
+    * `"margin"` - initial margin (quote currency).
+    * `"misc"` - comma delimited list of miscellaneous info:
+      * `"closing"` - trade closes all or part of a position.
+
+  If the trade opened a position, the follow fields are also present in the trade info:
+
+    * `"posstatus"` - position status (open/closed).
+    * `"cprice"` - average price of closed portion of position (quote currency).
+    * `"ccost"` - total cost of closed portion of position (quote currency).
+    * `"cfee"` - total fee of closed portion of position (quote currency).
+    * `"cvol"` - total fee of closed portion of position (quote currency).
+    * `"cmargin"` - total margin freed in closed portion of position (quote currency).
+    * `"net"` - net profit/loss of closed portion of position (quote currency, quote currency scale).
+    * `"trades"` - list of closing trades for position (if available).
+
+  Note:
+    * Unless otherwise stated, costs, fees, prices, and volumes are in the asset pair's scale, not
+      the currency's scale.
+    * Times given by trade tx ids are more accurate than unix timestamps.
+
+  ## Example response:
+
+      {:ok,
+        %{
+          "count" => 82,
+          "trades" => %{
+            "TECAE6-7ZWNZ-WICHNR" => %{
+              "cost" => "5.11000",
+              "fee" => "0.00818",
+              "margin" => "0.00000",
+              "misc" => "",
+              "ordertxid" => "OAOO5O-RAUU2-BCKZIH",
+              "ordertype" => "limit",
+              "pair" => "XXBTZEUR",
+              "price" => "365.00000",
+              "time" => 1457183489.6049,
+              "type" => "buy",
+              "vol" => "0.01400000"
+            }
+          }
+        }}
+
+  """
   @spec trades_history(Client.t(), integer, keyword) :: Krakex.API.response()
   def trades_history(client \\ @api.private_client(), offset, opts \\ [])
 
