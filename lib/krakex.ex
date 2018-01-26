@@ -605,6 +605,7 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "QueryOrders", [txid: tx_ids] ++ opts)
   end
 
+  @spec trades_history(Client.t(), integer, keyword) :: Krakex.API.response()
   def trades_history(client \\ @api.private_client(), offset, opts \\ [])
 
   def trades_history(%Client{} = client, offset, opts) do
@@ -615,6 +616,7 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "TradesHistory", [ofs: offset] ++ opts)
   end
 
+  @spec query_trades(Client.t(), [binary], keyword) :: Krakex.API.response()
   def query_trades(client \\ @api.private_client(), tx_ids, opts \\ [])
 
   def query_trades(%Client{} = client, tx_ids, opts) when is_list(opts) do
@@ -625,6 +627,7 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "QueryTrades", [txid: tx_ids] ++ opts)
   end
 
+  @spec open_positions(Client.t(), [binary], keyword) :: Krakex.API.response()
   def open_positions(client \\ @api.private_client(), tx_ids, opts \\ [])
 
   def open_positions(%Client{} = client, tx_ids, opts) when is_list(opts) do
@@ -635,6 +638,7 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "OpenPositions", [txid: tx_ids] ++ opts)
   end
 
+  @spec ledgers(Client.t(), integer, keyword) :: Krakex.API.response()
   def ledgers(client \\ @api.private_client(), offset, opts \\ [])
 
   def ledgers(%Client{} = client, offset, opts) do
@@ -645,10 +649,12 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "Ledgers", [ofs: offset] ++ opts)
   end
 
+  @spec query_ledgers(Client.t(), [binary]) :: Krakex.API.response()
   def query_ledgers(client \\ @api.private_client(), ledger_ids) do
     @api.private_request(client, "QueryLedgers", id: ledger_ids)
   end
 
+  @spec trade_volume(Client.t(), [binary], keyword) :: Krakex.API.response()
   def trade_volume(client \\ @api.private_client(), pairs, opts \\ [])
 
   def trade_volume(%Client{} = client, pairs, opts) when is_list(opts) do
