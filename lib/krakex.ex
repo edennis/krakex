@@ -32,7 +32,7 @@ defmodule Krakex do
   ## Private user trading
 
     * `add_order/5` (not implemented) - Add standard order.
-    * `cancel_order/2` (not implemented) - Cancel open order.
+    * `cancel_order/2` - Cancel open order.
 
   ## Private user funding
 
@@ -838,5 +838,22 @@ defmodule Krakex do
 
   def trade_volume(opts, []) do
     @api.private_request(@api.private_client(), "TradeVolume", opts)
+  end
+
+  @doc """
+  Cancel open order.
+
+  Takes a tx_id for the order to cancel.
+
+  Returns a map with the following fields:
+
+    * `"count"` - number of orders canceled.
+    * `"pending"` - if set, order(s) is/are pending cancellation.
+
+  Note: tx_id may be a user reference id.
+  """
+  @spec cancel_order(Client.t(), binary) :: Krakex.API.response()
+  def cancel_order(client \\ @api.private_client(), tx_id) do
+    @api.private_request(client, "CancelOrder", txid: tx_id)
   end
 end

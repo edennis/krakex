@@ -280,5 +280,15 @@ defmodule KrakexTest do
     end
   end
 
+  describe "private user trading" do
+    test "cancel_order/1" do
+      assert Krakex.cancel_order("O2JG54-WQQL7-PUNFUF") == {:ok, :cancel_order_1}
+    end
+
+    test "cancel_order/2" do
+      assert client() |> Krakex.cancel_order("O2JG54-WQQL7-PUNFUF") == {:ok, :cancel_order_2}
+    end
+  end
+
   defp client, do: TestAPI.custom_client()
 end

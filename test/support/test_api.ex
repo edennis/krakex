@@ -152,4 +152,10 @@ defmodule Krakex.TestAPI do
 
   def private_request(@private_client, "TradeVolume", "fee-info": true),
     do: {:ok, :trade_volume_1_opts}
+
+  def private_request(@private_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_1}
+
+  def private_request(@custom_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_2}
 end
