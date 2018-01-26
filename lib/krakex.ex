@@ -24,7 +24,7 @@ defmodule Krakex do
     * `query_orders/3` - Query orders info.
     * `trades_history/2` - Get trades history.
     * `query_trades/3` - Query trades info.
-    * `open_positions/2` - Get open positions.
+    * `open_positions/3` - Get open positions.
     * `ledgers/2` - Get ledgers info.
     * `query_ledgers/2` - Query ledgers.
     * `trade_volume/2` - Get trade volume.
@@ -706,6 +706,35 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "QueryTrades", [txid: tx_ids] ++ opts)
   end
 
+  @doc """
+  Get open positions.
+
+  Takes a list of tx_ids to restrict output to and the following keyword options:
+
+    * `:docalcs` - whether or not to include profit/loss calculations. (default = false)
+
+  Returns a map with the txid as the key and the value is a map with fields:
+
+    * `"ordertxid"` - order responsible for execution of trade.
+    * `"pair"` - asset pair.
+    * `"time"` - unix timestamp of trade.
+    * `"type"` - type of order used to open position (buy/sell).
+    * `"ordertype"` - order type used to open position.
+    * `"cost"` - opening cost of position (quote currency unless viqc set in `"oflags"`).
+    * `"fee"` - opening fee of position (quote currency).
+    * `"vol"` - position volume (base currency unless viqc set in `"oflags"`).
+    * `"vol_closed"` - position volume closed (base currency unless viqc set in `"oflags"`).
+    * `"margin"` - initial margin (quote currency).
+    * `"value"` - current value of remaining position (if docalcs requested.  quote currency).
+    * `"net"` - unrealized profit/loss of remaining position (if docalcs requested.  quote currency,
+      quote currency scale).
+    * `"misc"` - comma delimited list of miscellaneous info.
+    * `"oflags"` - comma delimited list of order flags:
+      * `"viqc"` - volume in quote currency.
+
+  Note: Unless otherwise stated, costs, fees, prices, and volumes are in the asset pair's scale,
+  not the currency's scale.
+  """
   @spec open_positions(Client.t(), [binary], keyword) :: Krakex.API.response()
   def open_positions(client \\ @api.private_client(), tx_ids, opts \\ [])
 
