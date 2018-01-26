@@ -23,7 +23,7 @@ defmodule Krakex do
     * `closed_orders/2` - Get closed orders.
     * `query_orders/3` - Query orders info.
     * `trades_history/2` - Get trades history.
-    * `query_trades/2` - Query trades info.
+    * `query_trades/3` - Query trades info.
     * `open_positions/2` - Get open positions.
     * `ledgers/2` - Get ledgers info.
     * `query_ledgers/2` - Query ledgers.
@@ -686,6 +686,15 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "TradesHistory", [ofs: offset] ++ opts)
   end
 
+  @doc """
+  Query trades info.
+
+  Takes a list of (maximum 20) tx_ids and the following keyword options:
+
+    * `:trades` - whether or not to include trades related to position in output. (default = false)
+
+  Returns a map with the same fields as described in `trades_history/2`.
+  """
   @spec query_trades(Client.t(), [binary], keyword) :: Krakex.API.response()
   def query_trades(client \\ @api.private_client(), tx_ids, opts \\ [])
 
