@@ -25,7 +25,7 @@ defmodule Krakex do
     * `trades_history/2` - Get trades history.
     * `query_trades/3` - Query trades info.
     * `open_positions/3` - Get open positions.
-    * `ledgers/2` - Get ledgers info.
+    * `ledgers/3` - Get ledgers info.
     * `query_ledgers/2` - Query ledgers.
     * `trade_volume/2` - Get trade volume.
 
@@ -746,6 +746,35 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "OpenPositions", [txid: tx_ids] ++ opts)
   end
 
+  @doc """
+  Get ledgers info.
+
+  Takes an offset and the following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+    * `:asset` - list of assets to restrict output to. `"currency"` (default)
+    * `:type` - type of ledger to retrieve:
+      * `"all"` - default.
+      * `"deposit"`
+      * `"withdrawal"`
+      * `"trade"`
+      * `"margin"`
+    * `:start` - starting unix timestamp or ledger id of results. (exclusive)
+    * `:end` - ending unix timestamp or ledger id of results. (inclusive)
+
+  Returns a map with the ledger id as the key and the value is a map with fields:
+
+    * `"refid"` - reference id.
+    * `"time"` - unix timestamp of ledger.
+    * `"type"` - type of ledger entry.
+    * `"aclass"` - asset class.
+    * `"asset"` - asset.
+    * `"amount"` - transaction amount.
+    * `"fee"` - transaction fee.
+    * `"balance"` - resulting balance.
+
+  Note: Times given by ledger ids are more accurate than unix timestamps.
+  """
   @spec ledgers(Client.t(), integer, keyword) :: Krakex.API.response()
   def ledgers(client \\ @api.private_client(), offset, opts \\ [])
 
@@ -757,6 +786,14 @@ defmodule Krakex do
     @api.private_request(@api.private_client(), "Ledgers", [ofs: offset] ++ opts)
   end
 
+  @doc """
+  Query ledgers.
+
+  Takes a list of (maximum 20) ledger ids to query info about.
+
+  Returns a map with the ledger id as the key and the value is a map with fields as described
+  in `ledgers/3`.
+  """
   @spec query_ledgers(Client.t(), [binary]) :: Krakex.API.response()
   def query_ledgers(client \\ @api.private_client(), ledger_ids) do
     @api.private_request(client, "QueryLedgers", id: ledger_ids)
