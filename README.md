@@ -57,7 +57,21 @@ balance1 = client1 |> Krakex.trade_balance(asset: "ZUSD")
 balance2 = client2 |> Krakex.trade_balance(asset: "EUR")
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/krakex](https://hexdocs.pm/krakex).
+## TODO
 
+- [ ] [Private user funding calls](https://www.kraken.com/help/api#private-user-funding)
+
+
+## Contributing
+
+1. Fork it (https://github.com/edennis/krakex/fork)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2018 Erick Dennis
