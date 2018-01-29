@@ -1,16 +1,19 @@
 defmodule Krakex.Mixfile do
   use Mix.Project
 
+  @version "0.2.0"
+
   def project do
     [
       app: :krakex,
-      version: "0.2.0",
+      version: @version,
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
+      docs: docs(),
       source_url: github_url(),
       test_coverage: [tool: ExCoveralls]
     ]
@@ -33,6 +36,14 @@ defmodule Krakex.Mixfile do
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Krakex",
+      source_ref: "v#{@version}",
+      source_url: github_url()
     ]
   end
 
