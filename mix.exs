@@ -53,6 +53,7 @@ defmodule Krakex.Mixfile do
 
   defp package() do
     [
+      files: ["README.md", "LICENSE", "mix.exs", "lib/**/*.ex"],
       maintainers: ["Erick Dennis"],
       licenses: ["MIT"],
       links: %{"GitHub" => github_url()}
