@@ -27,8 +27,12 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
 
 config :krakex,
   api_key: System.get_env("KRAKEN_API_KEY"),
   private_key: System.get_env("KRAKEN_PRIVATE_KEY")
+
+if File.exists?("config/#{Mix.env()}.secret.exs") do
+  import_config "#{Mix.env()}.secret.exs"
+end
