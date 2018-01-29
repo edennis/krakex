@@ -31,8 +31,8 @@ defmodule Krakex do
 
   ## Private user trading
 
-    * `add_order/5` (not implemented) - Add standard order.
-    * `cancel_order/2` (not implemented) - Cancel open order.
+    * `add_order/6` - Add standard order.
+    * `cancel_order/2` - Cancel open order.
 
   ## Private user funding
 
@@ -838,5 +838,113 @@ defmodule Krakex do
 
   def trade_volume(opts, []) do
     @api.private_request(@api.private_client(), "TradeVolume", opts)
+  end
+
+  @doc """
+  Add standard order.
+
+  Takes the following arguments:
+
+    * asset pair
+    * type - `"buy"` or `"sell"`.
+    * ordertype - one of the following:
+      * `"market"`
+      * `"limit"` - (price = limit price).
+      * `"stop-loss"` - (price = stop loss price).
+      * `"take-profit"` - (price = take profit price).
+      * `"stop-loss-profit"` - (price = stop loss price, price2 = take profit price).
+      * `"stop-loss-profit-limit"` - (price = stop loss price, price2 = take profit price).
+      * `"stop-loss-limit"` - (price = stop loss trigger price, price2 = triggered limit price).
+      * `"take-profit-limit"` - (price = take profit trigger price, price2 = triggered limit price).
+      * `"trailing-stop"` - (price = trailing stop offset).
+      * `"trailing-stop-limit"` - (price = trailing stop offset, price2 = triggered limit offset).
+      * `"stop-loss-and-limit"` - (price = stop loss price, price2 = limit price).
+      * `"settle-position"`
+    * volume - order volume in lots.
+
+  and the following keyword options:
+
+    * `:price` - price (dependent upon ordertype).
+    * `:price2` - secondary price (dependent upon ordertype).
+    * `:leverage` - amount of leverage desired (default = none).
+    * `:oflags` - list of order flags:
+      * `:viqc` - volume in quote currency (not available for leveraged orders).
+      * `:fcib` - prefer fee in base currency.
+      * `:fciq` - prefer fee in quote currency.
+      * `:nompp` - no market price protection.
+      * `:post` - post only order (available when ordertype = limit).
+    * `:starttm` - scheduled start time:
+      * `0` - now (default).
+      * `+<n>` - schedule start time <n> seconds from now.
+      * `<n>` - unix timestamp of start time.
+    * `:expiretm` - expiration time:
+      * `0` - no expiration (default).
+      * `+<n>` - expire <n> seconds from now.
+      * `<n>` - unix timestamp of expiration time.
+    * `:userref` - user reference id.  32-bit signed number.
+    * `:validate` - validate inputs only (does not submit order).
+
+  Returns a map with the following fields:
+
+    * `"descr"` - order description info.
+      * `"order"` - order description.
+      * `"close"` - onditional close order description (if conditional close set).
+    * `"txid"` - array of transaction ids for order (if order was added successfully).
+
+  Note:
+    * See `asset_pairs/2` for specifications on asset pair prices, lots, and leverage.
+    * Prices can be preceded by `+`, `-`, or `#` to signify the price as a relative amount (with
+      the exception of trailing stops, which are always relative). `+` adds the amount to the
+      current offered price. `-` subtracts the amount from the current offered price. `#` will
+      either add or subtract the amount to the current offered price, depending on the type and
+      order type used. Relative prices can be suffixed with a `%` to signify the relative amount
+      as a percentage of the offered price.
+    * For orders using leverage, 0 can be used for the volume to auto-fill the volume needed to
+      close out your position.
+    * If you receive the error `"EOrder:Trading agreement required"`, refer to your API key
+      management page for further details.
+
+  ## Example response:
+
+      {:ok,
+        %{
+          "descr" => %{"order" => "sell 100.00000000 XRPEUR @ limit 1.50000"},
+          "txid" => ["OL63HZ-UFU23-CKEBRA"]
+        }}
+
+  """
+  @spec add_order(Client.t(), binary, binary, binary, number, keyword) :: Krakex.API.response()
+  def add_order(client \\ @api.private_client(), pair, type, order_type, volume, opts \\ [])
+
+  def add_order(%Client{} = client, pair, type, order_type, volume, opts) when is_list(opts) do
+    opts = [pair: pair, type: type, ordertype: order_type, volume: volume] ++ opts
+    @api.private_request(client, "AddOrder", opts)
+  end
+
+  def add_order(pair, type, order_type, volume, opts, []) do
+    opts = [pair: pair, type: type, ordertype: order_type, volume: volume] ++ opts
+    @api.private_request(@api.private_client(), "AddOrder", opts)
+  end
+
+  @doc """
+  Cancel open order.
+
+  Takes a tx_id for the order to cancel.
+
+  Returns a map with the following fields:
+
+    * `"count"` - number of orders canceled.
+    * `"pending"` - if set, order(s) is/are pending cancellation.
+
+  Note: tx_id may be a user reference id.
+
+  ## Example response:
+
+      {:ok, %{"count" => 1}}
+
+  """
+  @spec cancel_order(Client.t(), binary) :: Krakex.API.response()
+  def cancel_order(client \\ @api.private_client(), tx_id) do
+    @api.private_request(client, "CancelOrder", txid: tx_id)
   end
 end

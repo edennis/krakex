@@ -152,4 +152,52 @@ defmodule Krakex.TestAPI do
 
   def private_request(@private_client, "TradeVolume", "fee-info": true),
     do: {:ok, :trade_volume_1_opts}
+
+  def private_request(@private_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_1}
+
+  def private_request(@custom_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_2}
+
+  def private_request(
+        @private_client,
+        "AddOrder",
+        pair: "BTCEUR",
+        type: "buy",
+        ordertype: "market",
+        volume: 0.2
+      ),
+      do: {:ok, :add_order_4}
+
+  def private_request(
+        @custom_client,
+        "AddOrder",
+        pair: "BTCEUR",
+        type: "sell",
+        ordertype: "market",
+        volume: 0.1
+      ),
+      do: {:ok, :add_order_5_client}
+
+  def private_request(
+        @private_client,
+        "AddOrder",
+        pair: "BTCEUR",
+        type: "sell",
+        ordertype: "limit",
+        volume: 0.5,
+        price: 12900
+      ),
+      do: {:ok, :add_order_5_opts}
+
+  def private_request(
+        @custom_client,
+        "AddOrder",
+        pair: "BTCEUR",
+        type: "buy",
+        ordertype: "limit",
+        volume: 0.25,
+        price: 11500
+      ),
+      do: {:ok, :add_order_6}
 end
