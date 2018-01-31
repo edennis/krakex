@@ -38,7 +38,7 @@ defmodule Krakex do
 
     * `deposit_methods/3` - Get deposit methods.
     * `deposit_addresses/4` - Get deposit addresses.
-    * `deposit_status/4` (not implemented) - Get status of recent deposits.
+    * `deposit_status/4` - Get status of recent deposits.
     * `withdraw_info/5` - Get withdrawal information.
     * `withdraw/5` (not implemented) - Withdraw funds.
     * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
@@ -1014,6 +1014,42 @@ defmodule Krakex do
   def deposit_addresses(asset, method, opts, []) do
     opts = [asset: asset, method: method] ++ opts
     @api.private_request(@api.private_client(), "DepositAddresses", opts)
+  end
+
+  @doc """
+  Get status of recent deposits.
+
+  Takes an asset, a deposit method, and the following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+
+  Returns a list of maps with the following fields:
+
+    * `"method"` - name of the deposit method used.
+    * `"aclass"` - asset class.
+    * `"asset"` - asset X-ISO4217-A3 code.
+    * `"refid"` - reference id.
+    * `"txid"` - method transaction id.
+    * `"info"` - method transaction information.
+    * `"amount"` - amount deposited.
+    * `"fee"` - fees paid.
+    * `"time"` - unix timestamp when request was made.
+    * `"status"` - status of deposit.
+    * `"status-prop"` - additional status properties (if available):
+      * `"return"` - a return transaction initiated by Kraken.
+      * `"onhold"` - deposit is on hold pending review.
+
+  """
+  @spec deposit_status(Client.t(), binary, binary, keyword) :: Krakex.API.response()
+  def deposit_status(client \\ @api.private_client(), asset, method, opts \\ [])
+
+  def deposit_status(%Client{} = client, asset, method, opts) when is_list(opts) do
+    @api.private_request(client, "DepositStatus", [asset: asset, method: method] ++ opts)
+  end
+
+  def deposit_status(asset, method, opts, []) do
+    opts = [asset: asset, method: method] ++ opts
+    @api.private_request(@api.private_client(), "DepositStatus", opts)
   end
 
   @doc """

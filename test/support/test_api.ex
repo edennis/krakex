@@ -237,6 +237,30 @@ defmodule Krakex.TestAPI do
       ),
       do: {:ok, :deposit_addresses_4}
 
+  def private_request(@private_client, "DepositStatus", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_status_2}
+
+  def private_request(@custom_client, "DepositStatus", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_status_3_client}
+
+  def private_request(
+        @private_client,
+        "DepositStatus",
+        asset: "BTC",
+        method: "Bitcoin",
+        aclass: "currency"
+      ),
+      do: {:ok, :deposit_status_3_opts}
+
+  def private_request(
+        @custom_client,
+        "DepositStatus",
+        asset: "BTC",
+        method: "Bitcoin",
+        aclass: "currency"
+      ),
+      do: {:ok, :deposit_status_4}
+
   def private_request(
         @private_client,
         "WithdrawInfo",
