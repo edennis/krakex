@@ -327,6 +327,25 @@ defmodule KrakexTest do
                {:ok, :deposit_methods_3}
     end
 
+    test "deposit_addresses/2" do
+      assert Krakex.deposit_addresses("BTC", "Bitcoin") == {:ok, :deposit_addresses_2}
+    end
+
+    test "deposit_addresses/3 client" do
+      assert client() |> Krakex.deposit_addresses("BTC", "Bitcoin") ==
+               {:ok, :deposit_addresses_3_client}
+    end
+
+    test "deposit_addresses/3 opts" do
+      assert Krakex.deposit_addresses("BTC", "Bitcoin", new: true) ==
+               {:ok, :deposit_addresses_3_opts}
+    end
+
+    test "deposit_addresses/4" do
+      assert client() |> Krakex.deposit_addresses("BTC", "Bitcoin", new: true) ==
+               {:ok, :deposit_addresses_4}
+    end
+
     test "withdraw_info/3" do
       assert Krakex.withdraw_info("BTC", "my_wallet", "0.5") == {:ok, :withdraw_info_3}
     end

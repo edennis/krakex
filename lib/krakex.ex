@@ -37,7 +37,7 @@ defmodule Krakex do
   ## Private user funding
 
     * `deposit_methods/3` - Get deposit methods.
-    * `deposit_addresses/4` (not implemented) - Get deposit addresses.
+    * `deposit_addresses/4` - Get deposit addresses.
     * `deposit_status/4` (not implemented) - Get status of recent deposits.
     * `withdraw_info/5` - Get withdrawal information.
     * `withdraw/5` (not implemented) - Withdraw funds.
@@ -976,6 +976,44 @@ defmodule Krakex do
 
   def deposit_methods(asset, opts, []) do
     @api.private_request(@api.private_client(), "DepositMethods", [asset: asset] ++ opts)
+  end
+
+  @doc """
+  Get deposit addresses.
+
+  Takes an asset, a deposit method, and the following keyword options:
+
+    * `:aclass` - asset class. `"currency"` (default)
+    * `:new` - whether or not to generate a new address. (default: `false`)
+
+  Returns a list of maps with the following fields:
+
+    * `"address"` - deposit address.
+    * `"expiretm"` - expiration time in unix timestamp, or `0` if not expiring.
+    * `"new"` - whether or not address has ever been used.
+
+  ## Example response:
+
+      {:ok,
+        [
+          %{
+            "address" => "38mKXaQiKBZn549tx41igEdLPPYMVeD34h",
+            "expiretm" => "0",
+            "new" => true
+          }
+        ]}
+
+  """
+  @spec deposit_addresses(Client.t(), binary, binary, keyword) :: Krakex.API.response()
+  def deposit_addresses(client \\ @api.private_client(), asset, method, opts \\ [])
+
+  def deposit_addresses(%Client{} = client, asset, method, opts) when is_list(opts) do
+    @api.private_request(client, "DepositAddresses", [asset: asset, method: method] ++ opts)
+  end
+
+  def deposit_addresses(asset, method, opts, []) do
+    opts = [asset: asset, method: method] ++ opts
+    @api.private_request(@api.private_client(), "DepositAddresses", opts)
   end
 
   @doc """
