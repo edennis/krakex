@@ -153,12 +153,6 @@ defmodule Krakex.TestAPI do
   def private_request(@private_client, "TradeVolume", "fee-info": true),
     do: {:ok, :trade_volume_1_opts}
 
-  def private_request(@private_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
-    do: {:ok, :cancel_order_1}
-
-  def private_request(@custom_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
-    do: {:ok, :cancel_order_2}
-
   def private_request(
         @private_client,
         "AddOrder",
@@ -200,4 +194,108 @@ defmodule Krakex.TestAPI do
         price: 11500
       ),
       do: {:ok, :add_order_6}
+
+  def private_request(@private_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_1}
+
+  def private_request(@custom_client, "CancelOrder", txid: "O2JG54-WQQL7-PUNFUF"),
+    do: {:ok, :cancel_order_2}
+
+  def private_request(@private_client, "DepositMethods", asset: "EUR"),
+    do: {:ok, :deposit_methods_1}
+
+  def private_request(@custom_client, "DepositMethods", asset: "EUR"),
+    do: {:ok, :deposit_methods_2_client}
+
+  def private_request(@private_client, "DepositMethods", asset: "EUR", aclass: "currency"),
+    do: {:ok, :deposit_methods_2_opts}
+
+  def private_request(@custom_client, "DepositMethods", asset: "EUR", aclass: "currency"),
+    do: {:ok, :deposit_methods_3}
+
+  def private_request(@private_client, "DepositAddresses", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_addresses_2}
+
+  def private_request(@custom_client, "DepositAddresses", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_addresses_3_client}
+
+  def private_request(
+        @private_client,
+        "DepositAddresses",
+        asset: "BTC",
+        method: "Bitcoin",
+        new: true
+      ),
+      do: {:ok, :deposit_addresses_3_opts}
+
+  def private_request(
+        @custom_client,
+        "DepositAddresses",
+        asset: "BTC",
+        method: "Bitcoin",
+        new: true
+      ),
+      do: {:ok, :deposit_addresses_4}
+
+  def private_request(@private_client, "DepositStatus", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_status_2}
+
+  def private_request(@custom_client, "DepositStatus", asset: "BTC", method: "Bitcoin"),
+    do: {:ok, :deposit_status_3_client}
+
+  def private_request(
+        @private_client,
+        "DepositStatus",
+        asset: "BTC",
+        method: "Bitcoin",
+        aclass: "currency"
+      ),
+      do: {:ok, :deposit_status_3_opts}
+
+  def private_request(
+        @custom_client,
+        "DepositStatus",
+        asset: "BTC",
+        method: "Bitcoin",
+        aclass: "currency"
+      ),
+      do: {:ok, :deposit_status_4}
+
+  def private_request(
+        @private_client,
+        "WithdrawInfo",
+        asset: "BTC",
+        key: "my_wallet",
+        amount: "0.5"
+      ),
+      do: {:ok, :withdraw_info_3}
+
+  def private_request(
+        @custom_client,
+        "WithdrawInfo",
+        asset: "BTC",
+        key: "my_wallet",
+        amount: "0.25"
+      ),
+      do: {:ok, :withdraw_info_4_client}
+
+  def private_request(
+        @private_client,
+        "WithdrawInfo",
+        asset: "BTC",
+        key: "my_wallet",
+        amount: "0.75",
+        aclass: "currency"
+      ),
+      do: {:ok, :withdraw_info_4_opts}
+
+  def private_request(
+        @custom_client,
+        "WithdrawInfo",
+        asset: "BTC",
+        key: "my_wallet",
+        amount: "0.15",
+        aclass: "currency"
+      ),
+      do: {:ok, :withdraw_info_5}
 end

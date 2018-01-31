@@ -309,5 +309,81 @@ defmodule KrakexTest do
     end
   end
 
+  describe "private user funding" do
+    test "deposit_methods/1" do
+      assert Krakex.deposit_methods("EUR") == {:ok, :deposit_methods_1}
+    end
+
+    test "deposit_methods/2 client" do
+      assert client() |> Krakex.deposit_methods("EUR") == {:ok, :deposit_methods_2_client}
+    end
+
+    test "deposit_methods/2 opts" do
+      assert Krakex.deposit_methods("EUR", aclass: "currency") == {:ok, :deposit_methods_2_opts}
+    end
+
+    test "deposit_methods/3" do
+      assert client() |> Krakex.deposit_methods("EUR", aclass: "currency") ==
+               {:ok, :deposit_methods_3}
+    end
+
+    test "deposit_addresses/2" do
+      assert Krakex.deposit_addresses("BTC", "Bitcoin") == {:ok, :deposit_addresses_2}
+    end
+
+    test "deposit_addresses/3 client" do
+      assert client() |> Krakex.deposit_addresses("BTC", "Bitcoin") ==
+               {:ok, :deposit_addresses_3_client}
+    end
+
+    test "deposit_addresses/3 opts" do
+      assert Krakex.deposit_addresses("BTC", "Bitcoin", new: true) ==
+               {:ok, :deposit_addresses_3_opts}
+    end
+
+    test "deposit_addresses/4" do
+      assert client() |> Krakex.deposit_addresses("BTC", "Bitcoin", new: true) ==
+               {:ok, :deposit_addresses_4}
+    end
+
+    test "deposit_status/2" do
+      assert Krakex.deposit_status("BTC", "Bitcoin") == {:ok, :deposit_status_2}
+    end
+
+    test "deposit_status/3 client" do
+      assert client() |> Krakex.deposit_status("BTC", "Bitcoin") ==
+               {:ok, :deposit_status_3_client}
+    end
+
+    test "deposit_status/3 opts" do
+      assert Krakex.deposit_status("BTC", "Bitcoin", aclass: "currency") ==
+               {:ok, :deposit_status_3_opts}
+    end
+
+    test "deposit_status/4" do
+      assert client() |> Krakex.deposit_status("BTC", "Bitcoin", aclass: "currency") ==
+               {:ok, :deposit_status_4}
+    end
+
+    test "withdraw_info/3" do
+      assert Krakex.withdraw_info("BTC", "my_wallet", "0.5") == {:ok, :withdraw_info_3}
+    end
+
+    test "withdraw_info/4 client" do
+      assert client() |> Krakex.withdraw_info("BTC", "my_wallet", "0.25") ==
+               {:ok, :withdraw_info_4_client}
+    end
+
+    test "withdraw_info/4 opts" do
+      assert Krakex.withdraw_info("BTC", "my_wallet", "0.75", aclass: "currency") ==
+               {:ok, :withdraw_info_4_opts}
+    end
+
+    test "withdraw_info/5" do
+      assert client() |> Krakex.withdraw_info("BTC", "my_wallet", "0.15", aclass: "currency") ==
+               {:ok, :withdraw_info_5}
+    end
+  end
+
   defp client, do: TestAPI.custom_client()
 end
