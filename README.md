@@ -59,8 +59,11 @@ balance2 = client2 |> Krakex.trade_balance(asset: "EUR")
 
 ## TODO
 
-- [ ] [Private user funding calls](https://www.kraken.com/help/api#private-user-funding)
+### Private user funding calls
 
+- [ ] [`withdraw/5`](https://www.kraken.com/help/api#withdraw-funds)
+- [ ] [`withdraw_status/3`](https://www.kraken.com/help/api#withdraw-status)
+- [ ] [`withdraw_cancel/4`](https://www.kraken.com/help/api#withdraw-cancel)
 
 ## Contributing
 
