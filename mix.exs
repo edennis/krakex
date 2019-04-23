@@ -7,7 +7,7 @@ defmodule Krakex.Mixfile do
     [
       app: :krakex,
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -15,7 +15,13 @@ defmodule Krakex.Mixfile do
       deps: deps(),
       docs: docs(),
       source_url: github_url(),
-      test_coverage: [tool: ExCoveralls]
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -30,12 +36,12 @@ defmodule Krakex.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 0.13"},
+      {:httpoison, "~> 1.4"},
       {:poison, "~> 3.1"},
-      {:excoveralls, "~> 0.8", only: :test},
-      {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
 
