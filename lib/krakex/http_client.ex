@@ -27,10 +27,12 @@ defmodule Krakex.HTTPClient do
 
   defp handle_http_response(%{status_code: status_code, body: body})
        when status_code in 200..206 do
-    case Poison.decode(body) do
-      {:ok, decoded} -> {:ok, decoded}
-      {:error, :invalid, _} -> {:error, {:invalid, body}}
-      {:error, {:invalid, _, _}} -> {:error, {:invalid, body}}
+    case Jason.decode(body) do
+      {:ok, decoded} ->
+        {:ok, decoded}
+
+      {:error, %Jason.DecodeError{}} ->
+        {:error, {:invalid, body}}
     end
   end
 
