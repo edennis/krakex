@@ -30,7 +30,7 @@ defmodule Krakex.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 1.1.0"},
+      {:httpoison, "~> 1.1"},
       {:jason, "~> 1.1"},
       {:excoveralls, "~> 0.8", only: :test},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
