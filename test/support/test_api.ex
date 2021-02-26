@@ -300,4 +300,7 @@ defmodule Krakex.TestAPI do
         aclass: "currency"
       ),
       do: {:ok, :withdraw_info_5}
+
+  def private_request(@private_client, "GetWebSocketsToken", []), do: {:ok, :websockets_token_0}
+  def private_request(@custom_client, "GetWebSocketsToken", []), do: {:ok, :websockets_token_1}
 end

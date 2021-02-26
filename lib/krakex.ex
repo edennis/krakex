@@ -44,6 +44,10 @@ defmodule Krakex do
     * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
     * `withdraw_cancel/4` (not implemented) - Request withdrawal cancelation.
 
+  ## Websockets authentication
+
+    * `websockets_token/0` - Get an authentication token to be used with WebSockets Private endpoints.
+
   """
 
   alias Krakex.Client
@@ -1088,5 +1092,29 @@ defmodule Krakex do
   def withdraw_info(asset, key, amount, opts, []) do
     opts = [asset: asset, key: key, amount: amount] ++ opts
     @api.private_request(@api.private_client(), "WithdrawInfo", opts)
+  end
+
+  @doc """
+  Get an authentication token to be used with WebSockets Private endpoints.
+
+  Returns a map with the fields:
+
+    * `"expires"` - number of seconds the token is valid for.
+    * `"token"` - the token.
+
+  ## Example response:
+
+      {:ok,
+        %{
+          "expires" => 900,
+          "token" => "some_secret_token"
+        }}
+
+  """
+  @spec websockets_token(Client.t()) :: Krakex.API.response()
+  def websockets_token(client \\ @api.private_client())
+
+  def websockets_token(%Client{} = client) do
+    @api.private_request(client, "GetWebSocketsToken")
   end
 end

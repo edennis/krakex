@@ -383,6 +383,14 @@ defmodule KrakexTest do
       assert client() |> Krakex.withdraw_info("BTC", "my_wallet", "0.15", aclass: "currency") ==
                {:ok, :withdraw_info_5}
     end
+
+    test "websockets_token/0" do
+      assert Krakex.websockets_token() == {:ok, :websockets_token_0}
+    end
+
+    test "websockets_token/1" do
+      assert client() |> Krakex.websockets_token() == {:ok, :websockets_token_1}
+    end
   end
 
   defp client, do: TestAPI.custom_client()
