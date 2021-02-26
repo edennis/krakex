@@ -35,6 +35,8 @@ jobs:
       run: mix test
     - name: Check code formatting
       run: mix format --check-formatted
+    - name: Run credo
+      run: mix credo --strict
     - name: Run test coverage
       run: mix coveralls.github
     - name: Restore PLT cache
