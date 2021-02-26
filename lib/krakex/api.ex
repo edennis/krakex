@@ -124,7 +124,7 @@ defmodule Krakex.API do
   defp handle_http_response({:error, reason}), do: {:error, reason}
 
   defp handle_api_response(%{"error" => [], "result" => result}), do: {:ok, result}
-  # TODO: check if more than one error can occur
+  # Not sure if more than one error can occur - just take the first one.
   defp handle_api_response(%{"error" => errors}), do: {:error, hd(errors)}
 
   defp process_params(params) do
