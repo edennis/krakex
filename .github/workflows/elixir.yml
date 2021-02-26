@@ -30,10 +30,22 @@ jobs:
         path: deps
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
+    - name: Restore PLT cache
+      uses: actions/cache@v2
+      with:
+        path: priv/plts
+        key: ${{ runner.os }}-plts-${{ hashFiles('**/mix.lock') }}
     - name: Install dependencies
       run: mix deps.get
+    - name: Create PLTs
+      if: steps.plt-cache.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p priv/plts
+        mix dialyzer --plt
     - name: Run tests
       run: mix test
+    - name: Run dialyzer
+      run: mix dialyzer --no-check --halt-exit-status
     - name: Run test coverage
       run: mix coveralls.github
     - name: Check code formatting
