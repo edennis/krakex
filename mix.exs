@@ -7,7 +7,7 @@ defmodule Krakex.Mixfile do
     [
       app: :krakex,
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -35,6 +35,7 @@ defmodule Krakex.Mixfile do
       {:jason, "~> 1.1"},
       {:excoveralls, "~> 0.8", only: :test},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]

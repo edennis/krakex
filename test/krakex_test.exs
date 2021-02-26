@@ -291,12 +291,12 @@ defmodule KrakexTest do
     end
 
     test "add_order/5 opts" do
-      assert Krakex.add_order("BTCEUR", "sell", "limit", 0.5, price: 12900) ==
+      assert Krakex.add_order("BTCEUR", "sell", "limit", 0.5, price: 12_900) ==
                {:ok, :add_order_5_opts}
     end
 
     test "add_order/6" do
-      assert client() |> Krakex.add_order("BTCEUR", "buy", "limit", 0.25, price: 11500) ==
+      assert client() |> Krakex.add_order("BTCEUR", "buy", "limit", 0.25, price: 11_500) ==
                {:ok, :add_order_6}
     end
 
