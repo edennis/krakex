@@ -48,7 +48,7 @@ defmodule Krakex do
 
   alias Krakex.Client
 
-  @api Application.get_env(:krakex, :api_mod, Krakex.API)
+  @api Application.compile_env(:krakex, :api_mod, Krakex.API)
 
   @doc """
   Get server time.
