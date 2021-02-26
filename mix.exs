@@ -7,7 +7,7 @@ defmodule Krakex.Mixfile do
     [
       app: :krakex,
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
