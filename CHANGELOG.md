@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.0
+
+### Bug fixes and improvements
+
+  * Fix bug in `add_order/6` [#10](https://github.com/edennis/krakex/issues/10)
+
+### Breaking Changes
+
+  * Now only Elixir versions 1.10 and above are supported.
+
 ## v0.4.2
 
 ### Bug fixes and improvements
