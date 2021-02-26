@@ -161,7 +161,7 @@ defmodule Krakex.TestAPI do
         pair: "BTCEUR",
         type: "buy",
         ordertype: "market",
-        volume: 0.2
+        volume: "0.2"
       ),
       do: {:ok, :add_order_4}
 
@@ -171,7 +171,7 @@ defmodule Krakex.TestAPI do
         pair: "BTCEUR",
         type: "sell",
         ordertype: "market",
-        volume: 0.1
+        volume: "0.1"
       ),
       do: {:ok, :add_order_5_client}
 
@@ -181,7 +181,7 @@ defmodule Krakex.TestAPI do
         pair: "BTCEUR",
         type: "sell",
         ordertype: "limit",
-        volume: 0.5,
+        volume: "0.5",
         price: 12_900
       ),
       do: {:ok, :add_order_5_opts}
@@ -192,7 +192,7 @@ defmodule Krakex.TestAPI do
         pair: "BTCEUR",
         type: "buy",
         ordertype: "limit",
-        volume: 0.25,
+        volume: "0.25",
         price: 11_500
       ),
       do: {:ok, :add_order_6}

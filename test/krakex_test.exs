@@ -282,21 +282,21 @@ defmodule KrakexTest do
 
   describe "private user trading" do
     test "add_order/4" do
-      assert Krakex.add_order("BTCEUR", "buy", "market", 0.2) == {:ok, :add_order_4}
+      assert Krakex.add_order("BTCEUR", "buy", "market", "0.2") == {:ok, :add_order_4}
     end
 
     test "add_order/5 client" do
-      assert client() |> Krakex.add_order("BTCEUR", "sell", "market", 0.1) ==
+      assert client() |> Krakex.add_order("BTCEUR", "sell", "market", "0.1") ==
                {:ok, :add_order_5_client}
     end
 
     test "add_order/5 opts" do
-      assert Krakex.add_order("BTCEUR", "sell", "limit", 0.5, price: 12_900) ==
+      assert Krakex.add_order("BTCEUR", "sell", "limit", "0.5", price: 12_900) ==
                {:ok, :add_order_5_opts}
     end
 
     test "add_order/6" do
-      assert client() |> Krakex.add_order("BTCEUR", "buy", "limit", 0.25, price: 11_500) ==
+      assert client() |> Krakex.add_order("BTCEUR", "buy", "limit", "0.25", price: 11_500) ==
                {:ok, :add_order_6}
     end
 
