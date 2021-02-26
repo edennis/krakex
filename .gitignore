@@ -21,3 +21,5 @@ erl_crash.dump
 
 /config/*.secret.exs
 .tool-versions
+
+/priv/plts
