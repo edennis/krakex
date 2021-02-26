@@ -913,7 +913,7 @@ defmodule Krakex do
         }}
 
   """
-  @spec add_order(Client.t(), binary, binary, binary, number, keyword) :: Krakex.API.response()
+  @spec add_order(Client.t(), binary, binary, binary, binary, keyword) :: Krakex.API.response()
   def add_order(client \\ @api.private_client(), pair, type, order_type, volume, opts \\ [])
 
   def add_order(%Client{} = client, pair, type, order_type, volume, opts) when is_list(opts) do
