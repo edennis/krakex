@@ -1,4 +1,6 @@
 defmodule Krakex.TestAPI do
+  @moduledoc false
+
   alias Krakex.Client
 
   @public_client %Client{endpoint: "http://public.test.com"}
@@ -180,7 +182,7 @@ defmodule Krakex.TestAPI do
         type: "sell",
         ordertype: "limit",
         volume: 0.5,
-        price: 12900
+        price: 12_900
       ),
       do: {:ok, :add_order_5_opts}
 
@@ -191,7 +193,7 @@ defmodule Krakex.TestAPI do
         type: "buy",
         ordertype: "limit",
         volume: 0.25,
-        price: 11500
+        price: 11_500
       ),
       do: {:ok, :add_order_6}
 

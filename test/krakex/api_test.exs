@@ -1,9 +1,9 @@
 defmodule Krakex.APITest do
   use ExUnit.Case
 
-  alias Krakex.Client
   alias Krakex.API
   alias Krakex.API.MissingCredentialsError
+  alias Krakex.Client
 
   defmodule ClientHelpers do
     def ok, do: {:ok, %{"error" => [], "result" => %{}}}
