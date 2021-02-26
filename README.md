@@ -1,6 +1,6 @@
 # Krakex
 
-[![Build Status](https://travis-ci.org/edennis/krakex.svg?branch=master)](https://travis-ci.org/edennis/krakex)
+[![Build Status](https://github.com/edennis/krakex/workflows/Elixir%20CI/badge.svg)](https://github.com/edennis/krakex/actions/workflows/elixir.yml)
 [![Coverage Status](https://coveralls.io/repos/github/edennis/krakex/badge.svg?branch=master)](https://coveralls.io/github/edennis/krakex?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/krakex.svg)](https://hex.pm/packages/krakex)
 
