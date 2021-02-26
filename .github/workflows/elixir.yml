@@ -36,3 +36,7 @@ jobs:
       run: mix test
     - name: Run test coverage
       run: mix coveralls.github
+    - name: Run dialyzer
+      run: mix dialyzer --halt-exit-status
+    - name: Check code formatting
+      run: mix format --check-formatted
