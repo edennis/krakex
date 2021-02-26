@@ -22,6 +22,7 @@ def deps do
 end
 ```
 
+
 ## Configuration
 
 The Kraken API consists of public and private calls. While you can use the public API as you like,
