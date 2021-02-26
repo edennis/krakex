@@ -888,7 +888,7 @@ defmodule Krakex do
 
     * `"descr"` - order description info.
       * `"order"` - order description.
-      * `"close"` - onditional close order description (if conditional close set).
+      * `"close"` - conditional close order description (if conditional close set).
     * `"txid"` - array of transaction ids for order (if order was added successfully).
 
   Note:
