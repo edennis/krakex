@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/edennis/krakex/badge.svg?branch=master)](https://coveralls.io/github/edennis/krakex?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/krakex.svg)](https://hex.pm/packages/krakex)
 
+
 Elixir client for the [Kraken Bitcoin Exchange API](https://www.kraken.com/help/api)
 
 > Note that this README refers to the `master` branch of Krakex, not the latest
