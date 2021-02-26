@@ -13,6 +13,7 @@ defmodule Krakex.Mixfile do
       description: description(),
       package: package(),
       deps: deps(),
+      dialyzer: dialyzer(),
       docs: docs(),
       source_url: github_url(),
       test_coverage: [tool: ExCoveralls]
@@ -36,6 +37,13 @@ defmodule Krakex.Mixfile do
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+    ]
+  end
+
+  def dialyzer do
+    [
+      plt_core_path: "priv/plts",
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 
