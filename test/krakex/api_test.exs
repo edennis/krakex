@@ -18,6 +18,7 @@ defmodule Krakex.APITest do
     def get(@endpoint <> "Test", [], []), do: ok()
     def get(@endpoint <> "Param", [foo: "bar"], []), do: ok()
     def get(@endpoint <> "ParamList", [foo: "bar,baz,qux"], []), do: ok()
+    def get(@endpoint <> "KeywordList", ["foo[bar]": "baz"], []), do: ok()
     def get(@endpoint <> "Error", [], []), do: error()
   end
 
@@ -44,6 +45,10 @@ defmodule Krakex.APITest do
 
     test "params as list", %{client: client} do
       assert client |> API.public_request("ParamList", foo: ["bar", "baz", "qux"]) == {:ok, %{}}
+    end
+
+    test "params as keyword list", %{client: client} do
+      assert client |> API.public_request("KeywordList", foo: [bar: "baz"]) == {:ok, %{}}
     end
 
     test "discard params with empty list", %{client: client} do

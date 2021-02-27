@@ -128,16 +128,23 @@ defmodule Krakex.API do
   defp handle_api_response(%{"error" => errors}), do: {:error, hd(errors)}
 
   defp process_params(params) do
-    Enum.map(params, fn {k, v} ->
-      case v do
-        v when is_list(v) ->
-          {k, Enum.join(v, ",")}
-
-        _ ->
-          {k, v}
-      end
-    end)
+    params
+    |> Enum.map(&param_mapper/1)
+    |> List.flatten()
     |> Enum.reject(&is_empty/1)
+  end
+
+  defp param_mapper({k, v}) do
+    cond do
+      Keyword.keyword?(v) ->
+        Enum.map(v, fn {mk, mv} -> {:"#{k}[#{mk}]", mv} end)
+
+      is_list(v) ->
+        {k, Enum.join(v, ",")}
+
+      true ->
+        {k, v}
+    end
   end
 
   defp is_empty({_, v}) when v in [nil, ""], do: true
