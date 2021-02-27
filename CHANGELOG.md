@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.6.0
+
+### Bug fixes and improvements
+
+  * Support conditional closes in `add_order/6` [#16](https://github.com/edennis/krakex/pull/16)
+  * Add websockets token endpoint [#15](https://github.com/edennis/krakex/pull/15)
+
 ## v0.5.0
 
 ### Bug fixes and improvements
