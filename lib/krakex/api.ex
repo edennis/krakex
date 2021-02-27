@@ -129,14 +129,18 @@ defmodule Krakex.API do
 
   defp process_params(params) do
     Enum.map(params, fn {k, v} ->
-      case v do
-        v when is_list(v) ->
+      cond do
+        Keyword.keyword?(v) ->
+          Enum.map(v, fn {mk, mv} -> {:"#{k}[#{mk}]", mv} end)
+
+        is_list(v) ->
           {k, Enum.join(v, ",")}
 
-        _ ->
+        true ->
           {k, v}
       end
     end)
+    |> List.flatten()
     |> Enum.reject(&is_empty/1)
   end
 

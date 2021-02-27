@@ -881,6 +881,10 @@ defmodule Krakex do
       * `0` - no expiration (default).
       * `+<n>` - expire <n> seconds from now.
       * `<n>` - unix timestamp of expiration time.
+    * `:close` - conditional close which accepts the following keyword options (dependent upon ordertype):
+      * `:ordertype` - as described above.
+      * `:price` - price.
+      * `:price2` - price (dependent upon ordertype).
     * `:userref` - user reference id.  32-bit signed number.
     * `:validate` - validate inputs only (does not submit order).
 
