@@ -33,6 +33,7 @@ defmodule Krakex.Mixfile do
     [
       {:httpoison, "~> 1.1"},
       {:jason, "~> 1.1"},
+      {:websockex, "~> 0.4"},
       {:excoveralls, "~> 0.8", only: :test},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
