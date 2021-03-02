@@ -890,7 +890,7 @@ defmodule Krakex do
       * `:price` - price.
       * `:price2` - price (dependent upon ordertype).
     * `:userref` - user reference id.  32-bit signed number.
-    * `:validate` - validate inputs only (does not submit order).
+    * `:validate` - validate inputs only (does not submit order) if set to `true`.
 
   Returns a map with the following fields:
 
