@@ -63,56 +63,36 @@ defmodule Krakex.Websocket.Client do
   end
 
   def handle_msg([_channel_id, payload, "ticker", pair], state) do
-    if Map.has_key?(state.callbacks, {"ticker", pair}) do
-      response = TickerResponse.from_payload(pair, payload)
-      state.callbacks[{"ticker", pair}].(response)
-    else
-      IO.inspect(state)
-    end
+    response = TickerResponse.from_payload(pair, payload)
+    state.callbacks[{"ticker", pair}].(response)
 
     {:ok, state}
   end
 
   def handle_msg([_channel_id, payload, "ohlc-" <> interval, pair], state) do
-    if Map.has_key?(state.callbacks, {"ohlc", pair}) do
-      response = OhlcResponse.from_payload(pair, interval, payload)
-      state.callbacks[{"ohlc", pair}].(response)
-    else
-      IO.inspect(state)
-    end
+    response = OhlcResponse.from_payload(pair, interval, payload)
+    state.callbacks[{"ohlc", pair}].(response)
 
     {:ok, state}
   end
 
   def handle_msg([_channel_id, payload, "trade", pair], state) do
-    if Map.has_key?(state.callbacks, {"trade", pair}) do
-      response = payload |> Enum.map(&TradeResponse.from_payload(pair, &1))
-      state.callbacks[{"trade", pair}].(response)
-    else
-      IO.inspect(state)
-    end
+    response = payload |> Enum.map(&TradeResponse.from_payload(pair, &1))
+    state.callbacks[{"trade", pair}].(response)
 
     {:ok, state}
   end
 
   def handle_msg([_channel_id, payload, "spread", pair], state) do
-    if Map.has_key?(state.callbacks, {"spread", pair}) do
-      response = SpreadResponse.from_payload(pair, payload)
-      state.callbacks[{"spread", pair}].(response)
-    else
-      IO.inspect(state)
-    end
+    response = SpreadResponse.from_payload(pair, payload)
+    state.callbacks[{"spread", pair}].(response)
 
     {:ok, state}
   end
 
   def handle_msg([_channel_id, payload, "book-" <> depth, pair], state) do
-    if Map.has_key?(state.callbacks, {"book", pair}) do
-      response = BookResponse.from_payload(pair, depth, payload)
-      state.callbacks[{"book", pair}].(response)
-    else
-      IO.inspect(state)
-    end
+    response = BookResponse.from_payload(pair, depth, payload)
+    state.callbacks[{"book", pair}].(response)
 
     {:ok, state}
   end
@@ -132,10 +112,4 @@ defmodule Krakex.Websocket.Client do
 
     {:text, Jason.encode!(payload)}
   end
-
-  # defp prune_nils({k, v}, acc) when is_map(v),
-  #   do: Map.put(acc, k, Enum.reduce(v, %{}, &prune_nils/2))
-
-  # defp prune_nils({_, nil}, acc), do: acc
-  # defp prune_nils({k, v}, acc), do: Map.put(acc, k, v)
 end
