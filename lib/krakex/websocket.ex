@@ -1,4 +1,18 @@
 defmodule Krakex.Websocket do
+  def ping(client) do
+    ref = make_ref()
+    caller = self()
+
+    WebSockex.cast(client, {:ping, ref, caller})
+
+    receive do
+      {:pong, ^ref, response} ->
+        {:ok, response}
+    after
+      2_000 -> {:error, :timeout}
+    end
+  end
+
   def ticker(client, pairs, callback) do
     WebSockex.cast(client, {:subscribe, "ticker", pairs, callback, []})
   end
