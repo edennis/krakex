@@ -4,6 +4,7 @@ defmodule Krakex.Websocket.Client do
   alias Krakex.Websocket.{
     BookResponse,
     OhlcResponse,
+    OpenOrderResponse,
     OwnTradeResponse,
     SpreadResponse,
     TickerResponse,
@@ -41,7 +42,7 @@ defmodule Krakex.Websocket.Client do
   def handle_cast({:subscribe, name, pairs, callback, opts}, state) do
     {frame, callbacks} =
       if state.private do
-        callbacks = %{"ownTrades" => callback}
+        callbacks = %{name => callback}
         {subscription_frame(name, pairs, Keyword.merge(opts, token: state.token)), callbacks}
       else
         callbacks = for pair <- pairs, cb <- [callback], into: %{}, do: {{name, pair}, cb}
@@ -127,6 +128,13 @@ defmodule Krakex.Websocket.Client do
   def handle_msg([payload, "ownTrades", %{"sequence" => _}], state) do
     response = OwnTradeResponse.from_payload(payload)
     state.callbacks["ownTrades"].(response)
+
+    {:ok, state}
+  end
+
+  def handle_msg([payload, "openOrders", %{"sequence" => _}], state) do
+    response = OpenOrderResponse.from_payload(payload)
+    state.callbacks["openOrders"].(response)
 
     {:ok, state}
   end

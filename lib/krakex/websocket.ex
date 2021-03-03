@@ -23,9 +23,15 @@ defmodule Krakex.Websocket do
     WebSockex.cast(client, {:subscribe, "book", pairs, callback, depth: depth})
   end
 
-  # whether to send historical feed data snapshot upon subscription (supported only for ownTrades subscriptions; default = true)
+  # opts: whether to send historical feed data snapshot upon subscription (supported only for ownTrades subscriptions; default = true)
   def own_trades(client, callback, opts \\ []) do
     snapshot = Keyword.get(opts, :snapshot, true)
     WebSockex.cast(client, {:subscribe, "ownTrades", [], callback, snapshot: snapshot})
+  end
+
+  # opts: whether to send rate-limit counter in updates (supported only for openOrders subscriptions; default = false)
+  def open_orders(client, callback, opts \\ []) do
+    ratecounter = Keyword.get(opts, :ratecounter, false)
+    WebSockex.cast(client, {:subscribe, "openOrders", [], callback, ratecounter: ratecounter})
   end
 end

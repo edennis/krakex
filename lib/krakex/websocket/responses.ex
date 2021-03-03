@@ -191,3 +191,75 @@ defmodule Krakex.Websocket.OwnTradeResponse do
     end)
   end
 end
+
+defmodule Krakex.Websocket.OrderStatusChangeResponse do
+  defstruct [:orderid, :status]
+end
+
+defmodule Krakex.Websocket.OpenOrderResponse do
+  defstruct [
+    :orderid,
+    :refid,
+    :userref,
+    :status,
+    :opentm,
+    :starttm,
+    :expiretm,
+    :vol,
+    :vol_exec,
+    :cost,
+    :fee,
+    :avg_price,
+    :stopprice,
+    :limitprice,
+    :misc,
+    :oflags,
+    :timeinforce,
+    :cancel_reason,
+    :ratecount,
+    descr: %{}
+  ]
+
+  def from_payload(payload) when is_list(payload) do
+    payload |> Enum.map(fn obj -> Enum.map(obj, &from_object/1) end)
+  end
+
+  defp from_object({orderid, %{"status" => "open"} = order}) do
+    %__MODULE__{
+      orderid: orderid,
+      refid: order["refid"],
+      userref: order["userref"],
+      status: order["status"],
+      opentm: order["opentm"],
+      starttm: order["starttm"],
+      expiretm: order["expiretm"],
+      vol: order["vol"],
+      vol_exec: order["vol_exec"],
+      cost: order["cost"],
+      fee: order["fee"],
+      avg_price: order["avg_price"],
+      stopprice: order["stopprice"],
+      limitprice: order["limitprice"],
+      misc: order["misc"],
+      oflags: order["oflags"],
+      timeinforce: order["timeinforce"],
+      cancel_reason: order["cancel_reason"],
+      ratecount: order["ratecount"],
+      descr: %{
+        pair: order["descr"]["pair"],
+        position: order["descr"]["position"],
+        type: order["descr"]["type"],
+        ordertype: order["descr"]["ordertype"],
+        price: order["descr"]["price"],
+        price2: order["descr"]["price2"],
+        leverage: order["descr"]["leverage"],
+        order: order["descr"]["order"],
+        close: order["descr"]["close"]
+      }
+    }
+  end
+
+  defp from_object({orderid, %{"status" => status}}) do
+    %Krakex.Websocket.OrderStatusChangeResponse{orderid: orderid, status: status}
+  end
+end
