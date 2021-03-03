@@ -105,7 +105,7 @@ defmodule Krakex.Websocket.Client do
   end
 
   def handle_msg([_channel_id, payload, "trade", pair], state) do
-    response = payload |> Enum.map(&TradeResponse.from_payload(pair, &1))
+    response = TradeResponse.from_payload(pair, payload)
     state.callbacks[{"trade", pair}].(response)
 
     {:ok, state}

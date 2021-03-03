@@ -60,8 +60,10 @@ defmodule Krakex.Websocket.TradeResponse do
   defstruct [:pair, :price, :volume, :time, :side, :order_type, :misc]
 
   def from_payload(pair, payload) when is_list(payload) do
-    [price, volume, time, side, order_type, misc] = payload
+    payload |> Enum.map(&from_list(pair, &1))
+  end
 
+  defp from_list(pair, [price, volume, time, side, order_type, misc]) do
     %__MODULE__{
       pair: pair,
       price: price,
