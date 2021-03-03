@@ -39,6 +39,11 @@ defmodule Krakex.Websocket.Client do
     {:ok, state}
   end
 
+  def handle_disconnect(_conn, state) do
+    IO.puts("disconnected")
+    {:ok, state}
+  end
+
   def handle_cast({:subscribe, name, pairs, callback, opts}, state) do
     {frame, callbacks} =
       if state.private do
@@ -50,11 +55,6 @@ defmodule Krakex.Websocket.Client do
       end
 
     {:reply, frame, %{state | callbacks: Map.merge(state.callbacks, callbacks)}}
-  end
-
-  def handle_disconnect(_conn, state) do
-    IO.puts("disconnected")
-    {:ok, state}
   end
 
   def handle_frame({:text, msg}, state) do
