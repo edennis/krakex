@@ -22,4 +22,10 @@ defmodule Krakex.Websocket do
     depth = Keyword.get(opts, :depth, 10)
     WebSockex.cast(client, {:subscribe, "book", pairs, callback, depth: depth})
   end
+
+  # whether to send historical feed data snapshot upon subscription (supported only for ownTrades subscriptions; default = true)
+  def own_trades(client, callback, opts \\ []) do
+    snapshot = Keyword.get(opts, :snapshot, true)
+    WebSockex.cast(client, {:subscribe, "ownTrades", [], callback, snapshot: snapshot})
+  end
 end

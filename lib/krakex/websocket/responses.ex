@@ -150,3 +150,44 @@ defmodule Krakex.Websocket.BookResponse do
   def from_payload(pair, depth, payload),
     do: BookUpdateResponse.from_payload(pair, depth, payload)
 end
+
+defmodule Krakex.Websocket.OwnTradeResponse do
+  defstruct [
+    :tradeid,
+    :ordertxid,
+    :postxid,
+    :pair,
+    :time,
+    :type,
+    :order_type,
+    :price,
+    :cost,
+    :fee,
+    :volume,
+    :margin,
+    :userref
+  ]
+
+  def from_payload(payload) when is_list(payload) do
+    payload
+    |> Enum.map(fn obj ->
+      Enum.map(obj, fn {tradeid, trade} ->
+        %__MODULE__{
+          tradeid: tradeid,
+          ordertxid: trade["ordertxid"],
+          postxid: trade["postxid"],
+          pair: trade["pair"],
+          time: trade["time"],
+          type: trade["type"],
+          order_type: trade["ordertype"],
+          price: trade["price"],
+          cost: trade["cost"],
+          fee: trade["fee"],
+          volume: trade["volume"],
+          margin: trade["margin"],
+          userref: trade["userref"]
+        }
+      end)
+    end)
+  end
+end

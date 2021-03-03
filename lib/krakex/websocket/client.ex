@@ -4,20 +4,33 @@ defmodule Krakex.Websocket.Client do
   alias Krakex.Websocket.{
     BookResponse,
     OhlcResponse,
+    OwnTradeResponse,
     SpreadResponse,
     TickerResponse,
     TradeResponse
   }
 
   @url "wss://ws.kraken.com"
+  @auth_url "wss://ws-auth.kraken.com"
 
   defmodule State do
     @moduledoc false
-    defstruct callbacks: %{}, heartbeats: 0, subscriptions: MapSet.new()
+    defstruct callbacks: %{},
+              heartbeats: 0,
+              subscriptions: MapSet.new(),
+              private: false,
+              token: nil
   end
 
   def start_link(opts \\ []) do
-    WebSockex.start_link(@url, __MODULE__, %State{}, opts)
+    {private, opts} = Keyword.pop(opts, :private)
+
+    if private do
+      {:ok, %{"token" => token}} = Krakex.websockets_token()
+      WebSockex.start_link(@auth_url, __MODULE__, %State{private: true, token: token}, opts)
+    else
+      WebSockex.start_link(@url, __MODULE__, %State{}, opts)
+    end
   end
 
   def handle_connect(_conn, state) do
@@ -26,8 +39,16 @@ defmodule Krakex.Websocket.Client do
   end
 
   def handle_cast({:subscribe, name, pairs, callback, opts}, state) do
-    callbacks = for pair <- pairs, cb <- [callback], into: %{}, do: {{name, pair}, cb}
-    {:reply, subscription_frame(name, pairs, opts), %{state | callbacks: callbacks}}
+    {frame, callbacks} =
+      if state.private do
+        callbacks = %{"ownTrades" => callback}
+        {subscription_frame(name, pairs, Keyword.merge(opts, token: state.token)), callbacks}
+      else
+        callbacks = for pair <- pairs, cb <- [callback], into: %{}, do: {{name, pair}, cb}
+        {subscription_frame(name, pairs, opts), callbacks}
+      end
+
+    {:reply, frame, %{state | callbacks: Map.merge(state.callbacks, callbacks)}}
   end
 
   def handle_disconnect(_conn, state) do
@@ -50,6 +71,7 @@ defmodule Krakex.Websocket.Client do
     {:ok, %{state | heartbeats: state.heartbeats + 1}}
   end
 
+  # public api
   def handle_msg(
         %{
           "event" => "subscriptionStatus",
@@ -60,6 +82,11 @@ defmodule Krakex.Websocket.Client do
         state
       ) do
     {:ok, %{state | subscriptions: MapSet.put(state.subscriptions, {channel_id, name, pair})}}
+  end
+
+  # private api
+  def handle_msg(%{"event" => "subscriptionStatus", "channelName" => channel_name}, state) do
+    {:ok, %{state | subscriptions: MapSet.put(state.subscriptions, channel_name)}}
   end
 
   def handle_msg([_channel_id, payload, "ticker", pair], state) do
@@ -97,6 +124,13 @@ defmodule Krakex.Websocket.Client do
     {:ok, state}
   end
 
+  def handle_msg([payload, "ownTrades", %{"sequence" => _}], state) do
+    response = OwnTradeResponse.from_payload(payload)
+    state.callbacks["ownTrades"].(response)
+
+    {:ok, state}
+  end
+
   def handle_msg(msg, state) do
     IO.inspect(msg, label: "not handled")
 
@@ -106,9 +140,15 @@ defmodule Krakex.Websocket.Client do
   defp subscription_frame(name, pairs, opts) do
     payload = %{
       event: "subscribe",
-      pair: pairs,
       subscription: Map.merge(%{name: name}, Map.new(opts))
     }
+
+    payload =
+      if pairs == [] do
+        payload
+      else
+        Map.merge(payload, %{pair: pairs})
+      end
 
     {:text, Jason.encode!(payload)}
   end
