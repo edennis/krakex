@@ -35,6 +35,8 @@ defmodule Krakex.Websocket.TickerResponse do
 end
 
 defmodule Krakex.Websocket.OhlcResponse do
+  alias Krakex.Util
+
   defstruct [:pair, :interval, :time, :etime, :open, :high, :low, :close, :vwap, :volume, :count]
 
   def from_payload(pair, interval, payload) when is_list(payload) do
@@ -43,8 +45,8 @@ defmodule Krakex.Websocket.OhlcResponse do
     %__MODULE__{
       pair: pair,
       interval: interval,
-      time: time,
-      etime: etime,
+      time: Util.timestamp_to_datetime(time),
+      etime: Util.timestamp_to_datetime(etime),
       open: open,
       high: high,
       low: low,
@@ -57,6 +59,8 @@ defmodule Krakex.Websocket.OhlcResponse do
 end
 
 defmodule Krakex.Websocket.TradeResponse do
+  alias Krakex.Util
+
   defstruct [:pair, :price, :volume, :time, :side, :order_type, :misc]
 
   def from_payload(pair, payload) when is_list(payload) do
@@ -68,7 +72,7 @@ defmodule Krakex.Websocket.TradeResponse do
       pair: pair,
       price: price,
       volume: volume,
-      time: time,
+      time: Util.timestamp_to_datetime(time),
       side: convert_side(side),
       order_type: convert_order_type(order_type),
       misc: misc
@@ -83,6 +87,8 @@ defmodule Krakex.Websocket.TradeResponse do
 end
 
 defmodule Krakex.Websocket.SpreadResponse do
+  alias Krakex.Util
+
   defstruct [:pair, :bid, :ask, :timestamp, :bid_volume, :ask_volume]
 
   def from_payload(pair, payload) when is_list(payload) do
@@ -92,7 +98,7 @@ defmodule Krakex.Websocket.SpreadResponse do
       pair: pair,
       bid: bid,
       ask: ask,
-      timestamp: timestamp,
+      timestamp: Util.timestamp_to_datetime(timestamp),
       bid_volume: bid_volume,
       ask_volume: ask_volume
     }
@@ -100,6 +106,8 @@ defmodule Krakex.Websocket.SpreadResponse do
 end
 
 defmodule Krakex.Websocket.BookSnapshotResponse do
+  alias Krakex.Util
+
   defstruct [:pair, :depth, asks: [], bids: []]
 
   def from_payload(pair, depth, %{} = payload) do
@@ -115,11 +123,13 @@ defmodule Krakex.Websocket.BookSnapshotResponse do
   end
 
   defp price_level_from_list([price, volume, timestamp]) do
-    %{price: price, volume: volume, timestamp: timestamp}
+    %{price: price, volume: volume, timestamp: Util.timestamp_to_datetime(timestamp)}
   end
 end
 
 defmodule Krakex.Websocket.BookUpdateResponse do
+  alias Krakex.Util
+
   defstruct [:pair, :depth, asks: [], bids: []]
 
   def from_payload(pair, depth, %{} = payload) do
@@ -135,11 +145,21 @@ defmodule Krakex.Websocket.BookUpdateResponse do
   end
 
   defp price_level_from_list([price, volume, timestamp]) do
-    %{price: price, volume: volume, timestamp: timestamp, update_type: nil}
+    %{
+      price: price,
+      volume: volume,
+      timestamp: Util.timestamp_to_datetime(timestamp),
+      update_type: nil
+    }
   end
 
   defp price_level_from_list([price, volume, timestamp, _update_type]) do
-    %{price: price, volume: volume, timestamp: timestamp, update_type: "republished"}
+    %{
+      price: price,
+      volume: volume,
+      timestamp: Util.timestamp_to_datetime(timestamp),
+      update_type: "republished"
+    }
   end
 end
 
@@ -154,6 +174,8 @@ defmodule Krakex.Websocket.BookResponse do
 end
 
 defmodule Krakex.Websocket.OwnTradeResponse do
+  alias Krakex.Util
+
   defstruct [
     :tradeid,
     :ordertxid,
@@ -179,7 +201,7 @@ defmodule Krakex.Websocket.OwnTradeResponse do
           ordertxid: trade["ordertxid"],
           postxid: trade["postxid"],
           pair: trade["pair"],
-          time: trade["time"],
+          time: Util.timestamp_to_datetime(trade["time"]),
           type: trade["type"],
           order_type: trade["ordertype"],
           price: trade["price"],
@@ -195,6 +217,8 @@ defmodule Krakex.Websocket.OwnTradeResponse do
 end
 
 defmodule Krakex.Websocket.OpenOrderResponse do
+  alias Krakex.Util
+
   defstruct [
     :orderid,
     :refid,
@@ -228,9 +252,9 @@ defmodule Krakex.Websocket.OpenOrderResponse do
       refid: order["refid"],
       userref: order["userref"],
       status: order["status"],
-      opentm: order["opentm"],
-      starttm: order["starttm"],
-      expiretm: order["expiretm"],
+      opentm: Util.timestamp_to_datetime(order["opentm"]),
+      starttm: Util.timestamp_to_datetime(order["starttm"]),
+      expiretm: Util.timestamp_to_datetime(order["expiretm"]),
       vol: order["vol"],
       vol_exec: order["vol_exec"],
       cost: order["cost"],
