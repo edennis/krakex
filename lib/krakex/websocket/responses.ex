@@ -194,10 +194,6 @@ defmodule Krakex.Websocket.OwnTradeResponse do
   end
 end
 
-defmodule Krakex.Websocket.OrderStatusChangeResponse do
-  defstruct [:orderid, :status]
-end
-
 defmodule Krakex.Websocket.OpenOrderResponse do
   defstruct [
     :orderid,
@@ -226,7 +222,7 @@ defmodule Krakex.Websocket.OpenOrderResponse do
     payload |> Enum.map(fn obj -> Enum.map(obj, &from_object/1) end)
   end
 
-  defp from_object({orderid, %{"status" => "open"} = order}) do
+  defp from_object({orderid, %{} = order}) do
     %__MODULE__{
       orderid: orderid,
       refid: order["refid"],
@@ -242,7 +238,8 @@ defmodule Krakex.Websocket.OpenOrderResponse do
       avg_price: order["avg_price"],
       stopprice: order["stopprice"],
       limitprice: order["limitprice"],
-      misc: order["misc"],
+      # this is not documented but "touched seems to be returned in the "flags" field
+      misc: order["misc"] || order["flags"],
       oflags: order["oflags"],
       timeinforce: order["timeinforce"],
       cancel_reason: order["cancel_reason"],
@@ -259,9 +256,5 @@ defmodule Krakex.Websocket.OpenOrderResponse do
         close: order["descr"]["close"]
       }
     }
-  end
-
-  defp from_object({orderid, %{"status" => status}}) do
-    %Krakex.Websocket.OrderStatusChangeResponse{orderid: orderid, status: status}
   end
 end
