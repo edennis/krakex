@@ -12,6 +12,14 @@ defmodule KrakexTest do
       assert client() |> Krakex.server_time() == {:ok, :server_time_1}
     end
 
+    test "system_status/0" do
+      assert Krakex.system_status() == {:ok, :system_status_0}
+    end
+
+    test "system_status/1" do
+      assert client() |> Krakex.system_status() == {:ok, :system_status_1}
+    end
+
     test "assets/0" do
       assert Krakex.assets() == {:ok, :assets_0}
     end

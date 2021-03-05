@@ -75,6 +75,29 @@ defmodule Krakex do
   end
 
   @doc """
+  Get system status.
+
+  Returns a map with the fields:
+
+    * `"status"` - one of:
+      * `"online"` - operational, full trading available.
+      * `"cancel_only"` - existing orders are cancelable, but new orders cannot be created.
+      * `"post_only"` - existing orders are cancelable, and only new post limit orders can be submitted.
+      * `"limit_only"` - existing orders are cancelable, and only new limit orders can be submitted.
+      * `"maintenance"` - system is offline for maintenance.
+    * `"timestamp"` - ISO-8601 datetime.
+
+  ## Example response:
+
+       {:ok, %{"status" => "online", "timestamp" => "2021-03-05T16:04:53Z"}}
+
+  """
+  @spec system_status(Client.t()) :: Krakex.API.response()
+  def system_status(client \\ @api.public_client()) do
+    @api.public_request(client, "SystemStatus")
+  end
+
+  @doc """
   Get asset info.
 
   Takes the following keyword options:
