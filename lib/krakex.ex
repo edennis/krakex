@@ -41,9 +41,6 @@ defmodule Krakex do
     * `deposit_addresses/4` - Get deposit addresses.
     * `deposit_status/4` - Get status of recent deposits.
     * `withdraw_info/5` - Get withdrawal information.
-    * `withdraw/5` (not implemented) - Withdraw funds.
-    * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
-    * `withdraw_cancel/4` (not implemented) - Request withdrawal cancelation.
 
   ## Websockets authentication
 
