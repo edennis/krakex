@@ -47,7 +47,7 @@ defmodule Krakex do
 
   ## Websockets authentication
 
-    * `websockets_token/1` - Get an authentication token to be used with WebSockets Private endpoints.
+    * `websockets_token/0` - Get an authentication token to be used with WebSockets Private endpoints.
 
   """
 
