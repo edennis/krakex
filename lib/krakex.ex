@@ -7,6 +7,7 @@ defmodule Krakex do
   ## Public market data
 
     * `server_time/1` - Get server time.
+    * `system_status/1` - Get system status.
     * `assets/2` - Get asset info.
     * `asset_pairs/2` - Get tradable asset pairs.
     * `ticker/2` - Get ticker information.
@@ -46,7 +47,7 @@ defmodule Krakex do
 
   ## Websockets authentication
 
-    * `websockets_token/0` - Get an authentication token to be used with WebSockets Private endpoints.
+    * `websockets_token/1` - Get an authentication token to be used with WebSockets Private endpoints.
 
   """
 
