@@ -15,6 +15,8 @@ defmodule Krakex.TestAPI do
 
   def public_request(@public_client, "Time", []), do: {:ok, :server_time_0}
   def public_request(@custom_client, "Time", []), do: {:ok, :server_time_1}
+  def public_request(@public_client, "SystemStatus", []), do: {:ok, :system_status_0}
+  def public_request(@custom_client, "SystemStatus", []), do: {:ok, :system_status_1}
   def public_request(@public_client, "Assets", []), do: {:ok, :assets_0}
   def public_request(@custom_client, "Assets", []), do: {:ok, :assets_1_client}
   def public_request(@public_client, "Assets", asset: ["BTC"]), do: {:ok, :assets_1_opts}
