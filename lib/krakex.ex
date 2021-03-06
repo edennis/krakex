@@ -7,6 +7,7 @@ defmodule Krakex do
   ## Public market data
 
     * `server_time/1` - Get server time.
+    * `system_status/1` - Get system status.
     * `assets/2` - Get asset info.
     * `asset_pairs/2` - Get tradable asset pairs.
     * `ticker/2` - Get ticker information.
@@ -40,13 +41,10 @@ defmodule Krakex do
     * `deposit_addresses/4` - Get deposit addresses.
     * `deposit_status/4` - Get status of recent deposits.
     * `withdraw_info/5` - Get withdrawal information.
-    * `withdraw/5` (not implemented) - Withdraw funds.
-    * `withdraw_status/3` (not implemented) - Get status of recent withdrawals.
-    * `withdraw_cancel/4` (not implemented) - Request withdrawal cancelation.
 
   ## Websockets authentication
 
-    * `websockets_token/0` - Get an authentication token to be used with WebSockets Private endpoints.
+    * `websockets_token/1` - Get an authentication token to be used with WebSockets Private endpoints.
 
   """
 
@@ -72,6 +70,29 @@ defmodule Krakex do
   @spec server_time(Client.t()) :: Krakex.API.response()
   def server_time(client \\ @api.public_client()) do
     @api.public_request(client, "Time")
+  end
+
+  @doc """
+  Get system status.
+
+  Returns a map with the fields:
+
+    * `"status"` - one of:
+      * `"online"` - operational, full trading available.
+      * `"cancel_only"` - existing orders are cancelable, but new orders cannot be created.
+      * `"post_only"` - existing orders are cancelable, and only new post limit orders can be submitted.
+      * `"limit_only"` - existing orders are cancelable, and only new limit orders can be submitted.
+      * `"maintenance"` - system is offline for maintenance.
+    * `"timestamp"` - ISO-8601 datetime.
+
+  ## Example response:
+
+       {:ok, %{"status" => "online", "timestamp" => "2021-03-05T16:04:53Z"}}
+
+  """
+  @spec system_status(Client.t()) :: Krakex.API.response()
+  def system_status(client \\ @api.public_client()) do
+    @api.public_request(client, "SystemStatus")
   end
 
   @doc """

@@ -57,13 +57,27 @@ balance1 = client1 |> Krakex.trade_balance(asset: "ZUSD")
 balance2 = client2 |> Krakex.trade_balance(asset: "EUR")
 ```
 
-## TODO
+## TODO - Help wanted!
+
+### Private user data
+
+- [ ] [`add_export/3`](https://www.kraken.com/features/api#add-history-export)
+- [ ] [`export_status/2`](https://www.kraken.com/features/api#get-export-statuses)
+- [ ] [`retrieve_export/2`](https://www.kraken.com/features/api#get-history-export)
+- [ ] [`remove_export/3`](https://www.kraken.com/features/api#remove-history-export)
+
+### Private user trading
+
+- [ ] [`cancel_all/1`](https://www.kraken.com/features/api#cancel-all-open-orders)
+- [ ] [`cancel_all_orders_after/2`](https://www.kraken.com/features/api#cancel-all-orders-after)
+
 
 ### Private user funding calls
 
 - [ ] [`withdraw/5`](https://www.kraken.com/help/api#withdraw-funds)
 - [ ] [`withdraw_status/3`](https://www.kraken.com/help/api#withdraw-status)
 - [ ] [`withdraw_cancel/4`](https://www.kraken.com/help/api#withdraw-cancel)
+- [ ] [`wallet_transfer/4`](https://www.kraken.com/features/api#wallet-transfer)
 
 ## Contributing
 
