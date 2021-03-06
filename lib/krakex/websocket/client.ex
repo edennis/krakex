@@ -20,8 +20,7 @@ defmodule Krakex.Websocket.Client do
               heartbeats: 0,
               subscriptions: MapSet.new(),
               private: false,
-              token: nil,
-              queries: %{}
+              token: nil
   end
 
   def start_link(opts \\ []) do
@@ -43,12 +42,6 @@ defmodule Krakex.Websocket.Client do
   def handle_disconnect(_conn, state) do
     IO.puts("disconnected")
     {:ok, state}
-  end
-
-  def handle_cast({:ping, ref, from}, state) do
-    reqid = System.system_time()
-    json = Jason.encode!(%{event: "ping", reqid: reqid})
-    {:reply, {:text, json}, %{state | queries: Map.put(state.queries, reqid, {ref, from})}}
   end
 
   def handle_cast({:subscribe, name, pairs, callback, opts}, state) do
@@ -73,12 +66,6 @@ defmodule Krakex.Websocket.Client do
         IO.puts("error decoding json: #{msg}, error: #{Jason.DecodeError.message(error)}")
         {:ok, state}
     end
-  end
-
-  def handle_msg(%{"event" => "pong", "reqid" => reqid} = msg, state) do
-    {ref, caller} = state.queries[reqid]
-    send(caller, {:pong, ref, msg})
-    {:ok, state}
   end
 
   def handle_msg(%{"event" => "heartbeat"}, state) do
