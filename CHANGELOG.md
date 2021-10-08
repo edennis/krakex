@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.7.0
+
+### Bug fixes and improvements
+
+  * Add `system_status/1` [#17](https://github.com/edennis/krakex/pull/17)
+  * Support for OTP 24
+
 ## v0.6.0
 
 ### Bug fixes and improvements
