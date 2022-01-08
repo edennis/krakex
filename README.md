@@ -17,7 +17,7 @@ The package can be installed by adding `krakex` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:krakex, "~> 0.7.0}
+    {:krakex, "~> 0.7.0"}
   ]
 end
 ```
